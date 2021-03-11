@@ -88,18 +88,4 @@ class User extends Authenticatable
     {
         return $this->ownsTeam($this->currentTeam);
     }
-
-    /**
-     * Get all of the teams the user owns or belongs to excluding their personal team
-     *
-     * @return Collection
-     */
-    public function allTeams()
-    {
-        if($this->hasPermissionTo('edit teams')) {
-            return $this->ownedTeams->merge($this->teams)->sortBy('name');
-        }
-
-        return $this->teams->sortBy('name');
-    }
 }
