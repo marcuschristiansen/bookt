@@ -17117,6 +17117,11 @@ __webpack_require__.r(__webpack_exports__);
       showingNavigationDropdown: false
     };
   },
+  computed: {
+    hasCalendars: function hasCalendars() {
+      return this.user.current_team.calendars.length;
+    }
+  },
   methods: {
     switchToTeam: function switchToTeam(team) {
       this.$inertia.put(route('current-team.update'), {
@@ -20768,7 +20773,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   }, 8
   /* PROPS */
-  , ["href", "active"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_nav_link, {
+  , ["href", "active"]), $options.hasCalendars ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_jet_nav_link, {
+    key: 0,
     href: _ctx.route('bookings.index', {
       date: $options.formatDate(new Date(), 'YYYY-MM-DD'),
       calendar: $props.user.current_team.calendars[0]
@@ -20783,8 +20789,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   }, 8
   /* PROPS */
-  , ["href", "active"]), $props.user.owns_current_team ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_jet_nav_link, {
-    key: 0,
+  , ["href", "active"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.user.owns_current_team ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_jet_nav_link, {
+    key: 1,
     href: _ctx.route('calendars.index'),
     active: _ctx.route().current('calendars.index')
   }, {
@@ -20966,7 +20972,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   }, 8
   /* PROPS */
-  , ["href", "active"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_responsive_nav_link, {
+  , ["href", "active"]), $options.hasCalendars ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_jet_responsive_nav_link, {
+    key: 0,
     href: _ctx.route('bookings.index', {
       date: $options.formatDate(new Date(), 'YYYY-MM-DD'),
       calendar: $props.user.current_team.calendars[0]
@@ -20981,8 +20988,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   }, 8
   /* PROPS */
-  , ["href", "active"]), $props.user.owns_current_team ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_jet_responsive_nav_link, {
-    key: 0,
+  , ["href", "active"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.user.owns_current_team ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_jet_responsive_nav_link, {
+    key: 1,
     href: _ctx.route('calendars.index'),
     active: _ctx.route().current('calendars.index')
   }, {

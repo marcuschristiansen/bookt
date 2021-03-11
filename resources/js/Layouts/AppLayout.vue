@@ -28,6 +28,7 @@
                                     Dashboard
                                 </jet-nav-link>
                                 <jet-nav-link
+                                    v-if="hasCalendars"
                                     :href="
                                         route('bookings.index', {
                                             date: formatDate(
@@ -320,6 +321,7 @@
                             Dashboard
                         </jet-responsive-nav-link>
                         <jet-responsive-nav-link
+                            v-if="hasCalendars"
                             :href="
                                 route('bookings.index', {
                                     date: formatDate(new Date(), 'YYYY-MM-DD'),
@@ -501,6 +503,11 @@ export default {
         return {
             showingNavigationDropdown: false,
         }
+    },
+    computed: {
+        hasCalendars() {
+            return this.user.current_team.calendars.length
+        },
     },
     methods: {
         switchToTeam(team) {
