@@ -25,10 +25,7 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    $user = auth()->user();
-    return Inertia::render('Dashboard', [
-        'ownsCurrentTeam' => $user->ownsTeam($user->currentTeam)
-    ]);
+    return Inertia::render('Dashboard');
 })->name('dashboard');
 
 //Route::middleware(['auth:sanctum', 'verified'])->get('/calendars', function () {

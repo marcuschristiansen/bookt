@@ -28,7 +28,7 @@
                                     Dashboard
                                 </jet-nav-link>
                                 <jet-nav-link
-                                    v-if="hasCalendars"
+                                    v-if="belongsToAnyTeam"
                                     :href="
                                         route('bookings.index', {
                                             date: formatDate(
@@ -64,6 +64,7 @@
                                     <template #trigger>
                                         <span class="inline-flex rounded-md">
                                             <button
+                                                v-if="belongsToAnyTeam"
                                                 type="button"
                                                 class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:bg-gray-50 hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150"
                                             >
@@ -102,6 +103,7 @@
 
                                                 <!-- Team Settings -->
                                                 <jet-dropdown-link
+                                                    v-if="belongsToAnyTeam"
                                                     :href="
                                                         route(
                                                             'teams.show',
@@ -130,13 +132,16 @@
 
                                                 <!-- Team Switcher -->
                                                 <div
+                                                    v-if="
+                                                        user.owned_teams.length
+                                                    "
                                                     class="block px-4 py-2 text-xs text-gray-400"
                                                 >
-                                                    Switch Teams
+                                                    My Teams
                                                 </div>
 
                                                 <template
-                                                    v-for="team in user.all_teams"
+                                                    v-for="team in user.owned_teams"
                                                     :key="team.id"
                                                 >
                                                     <form
@@ -145,6 +150,62 @@
                                                         "
                                                     >
                                                         <jet-dropdown-link
+                                                            v-if="
+                                                                belongsToAnyTeam
+                                                            "
+                                                            as="button"
+                                                        >
+                                                            <div
+                                                                class="flex items-center"
+                                                            >
+                                                                <svg
+                                                                    v-if="
+                                                                        team.id ==
+                                                                        user.current_team_id
+                                                                    "
+                                                                    class="mr-2 h-5 w-5 text-green-400"
+                                                                    fill="none"
+                                                                    stroke-linecap="round"
+                                                                    stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    stroke="currentColor"
+                                                                    viewBox="0 0 24 24"
+                                                                >
+                                                                    <path
+                                                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                                    ></path>
+                                                                </svg>
+                                                                <div>
+                                                                    {{
+                                                                        team.name
+                                                                    }}
+                                                                </div>
+                                                            </div>
+                                                        </jet-dropdown-link>
+                                                    </form>
+                                                </template>
+                                                <div
+                                                    v-if="
+                                                        user.memberships.length
+                                                    "
+                                                    class="block px-4 py-2 text-xs text-gray-400"
+                                                >
+                                                    My Memberships
+                                                </div>
+
+                                                <template
+                                                    v-for="team in user.memberships"
+                                                    :key="team.id"
+                                                >
+                                                    <form
+                                                        @submit.prevent="
+                                                            switchToTeam(team)
+                                                        "
+                                                    >
+                                                        <jet-dropdown-link
+                                                            v-if="
+                                                                belongsToAnyTeam
+                                                            "
                                                             as="button"
                                                         >
                                                             <div
@@ -321,7 +382,7 @@
                             Dashboard
                         </jet-responsive-nav-link>
                         <jet-responsive-nav-link
-                            v-if="hasCalendars"
+                            v-if="belongsToAnyTeam"
                             :href="
                                 route('bookings.index', {
                                     date: formatDate(new Date(), 'YYYY-MM-DD'),
@@ -406,6 +467,7 @@
 
                                 <!-- Team Settings -->
                                 <jet-responsive-nav-link
+                                    v-if="belongsToAnyTeam"
                                     :href="
                                         route('teams.show', user.current_team)
                                     "
@@ -425,17 +487,60 @@
 
                                 <!-- Team Switcher -->
                                 <div
+                                    v-if="user.owned_teams.length"
                                     class="block px-4 py-2 text-xs text-gray-400"
                                 >
-                                    Switch Teams
+                                    My Teams
                                 </div>
 
                                 <template
-                                    v-for="team in user.all_teams"
+                                    v-for="team in user.owned_teams"
                                     :key="team.id"
                                 >
                                     <form @submit.prevent="switchToTeam(team)">
-                                        <jet-responsive-nav-link as="button">
+                                        <jet-responsive-nav-link
+                                            v-if="belongsToAnyTeam"
+                                            as="button"
+                                        >
+                                            <div class="flex items-center">
+                                                <svg
+                                                    v-if="
+                                                        team.id ==
+                                                        user.current_team_id
+                                                    "
+                                                    class="mr-2 h-5 w-5 text-green-400"
+                                                    fill="none"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                    ></path>
+                                                </svg>
+                                                <div>{{ team.name }}</div>
+                                            </div>
+                                        </jet-responsive-nav-link>
+                                    </form>
+                                </template>
+                                <div
+                                    v-if="user.memberships.length"
+                                    class="block px-4 py-2 text-xs text-gray-400"
+                                >
+                                    My Memberships
+                                </div>
+
+                                <template
+                                    v-for="team in user.memberships"
+                                    :key="team.id"
+                                >
+                                    <form @submit.prevent="switchToTeam(team)">
+                                        <jet-responsive-nav-link
+                                            v-if="belongsToAnyTeam"
+                                            as="button"
+                                        >
                                             <div class="flex items-center">
                                                 <svg
                                                     v-if="
@@ -505,8 +610,8 @@ export default {
         }
     },
     computed: {
-        hasCalendars() {
-            return this.user.current_team.calendars.length
+        belongsToAnyTeam() {
+            return this.user.owned_teams.length || this.user.memberships.length
         },
     },
     methods: {
