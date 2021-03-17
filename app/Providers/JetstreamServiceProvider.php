@@ -58,7 +58,7 @@ class JetstreamServiceProvider extends ServiceProvider
             'delete',
         ]);
 
-        Jetstream::role('user', __('Index'), [
+        Jetstream::role('user', __('User'), [
             'create',
             'read',
             'update',

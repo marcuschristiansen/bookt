@@ -35,6 +35,8 @@ class AddTeamMember implements AddsTeamMembers
             $newTeamMember, ['role' => $role]
         );
 
+        $newTeamMember->assignRole(\Spatie\Permission\Models\Role::findByName($role));
+
         TeamMemberAdded::dispatch($team, $newTeamMember);
     }
 

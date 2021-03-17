@@ -76,9 +76,6 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make(env('PASSWORD')),
         ]);
         $superAdmin->assignRole(Role::findByName('super-admin'));
-//        Team::factory()->create([
-//            'user_id' => $superAdmin->getKey()
-//        ]);
 
         // Team Admin
         $teamAdmin = User::factory()->create([
@@ -87,13 +84,24 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make(env('PASSWORD')),
         ]);
         $teamAdmin->assignRole(Role::findByName('team-admin'));
-        $teams = Team::factory(3)->create([
+        // 1 private team and 3 public teams
+        Team::factory()->create([
+            'is_public' => false,
             'user_id' => $teamAdmin->getKey()
         ])->each(function($team) {
             Calendar::factory()->create(['team_id' => $team->getKey()])->each(function($calendar) {
                 $this->createSlots($calendar);
             });
         });
+        Team::factory(3)->create([
+            'user_id' => $teamAdmin->getKey()
+        ])->each(function($team) {
+            Calendar::factory()->create(['team_id' => $team->getKey()])->each(function($calendar) {
+                $this->createSlots($calendar);
+            });
+        });
+
+        $teams = Team::where('user_id', $teamAdmin->getKey())->get();
 
         // Calendars
         Calendar::factory(20)->create()->each(function($calendar) {
@@ -107,9 +115,6 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password')
         ]);
         $user->assignRole(Role::findByName('user'));
-//        Team::factory()->create([
-//            'user_id' => $user
-//        ]);
         $team = $teams->random();
         $user->teams()->sync([$team->getKey() => ['role' => 'user']]);
         $calendar = $team->calendars->random();
@@ -133,10 +138,6 @@ class DatabaseSeeder extends Seeder
         $users = User::factory(10)->create();
         $users->each(function($user) use ($teams) {
             $user->assignRole(Role::findByName('user'));
-
-//            Team::factory()->create([
-//                'user_id' => $user
-//            ]);
 
             $team = $teams->random();
             $user->teams()->sync([$team->getKey() => ['role' => 'user']]);

@@ -33,17 +33,28 @@
 
                 <jet-input
                     id="name"
+                    v-model="form.name"
                     type="text"
                     class="mt-1 block w-full"
-                    v-model="form.name"
                     :disabled="!permissions.canUpdateTeam"
                 />
 
                 <jet-input-error :message="form.errors.name" class="mt-2" />
             </div>
+
+            <!-- Private/Public -->
+            <div class="col-span-6 sm:col-span-4">
+                <label class="flex items-center">
+                    <jet-checkbox
+                        v-model:checked="form.is_public"
+                        :value="form.is_public"
+                    />
+                    <span class="ml-2 text-sm text-gray-600">Is public?</span>
+                </label>
+            </div>
         </template>
 
-        <template #actions v-if="permissions.canUpdateTeam">
+        <template v-if="permissions.canUpdateTeam" #actions>
             <jet-action-message :on="form.recentlySuccessful" class="mr-3">
                 Saved.
             </jet-action-message>
@@ -59,12 +70,13 @@
 </template>
 
 <script>
-import JetActionMessage from "@/Jetstream/ActionMessage";
-import JetButton from "@/Jetstream/Button";
-import JetFormSection from "@/Jetstream/FormSection";
-import JetInput from "@/Jetstream/Input";
-import JetInputError from "@/Jetstream/InputError";
-import JetLabel from "@/Jetstream/Label";
+import JetActionMessage from '@/Jetstream/ActionMessage'
+import JetButton from '@/Jetstream/Button'
+import JetFormSection from '@/Jetstream/FormSection'
+import JetInput from '@/Jetstream/Input'
+import JetCheckbox from '@/Jetstream/Checkbox'
+import JetInputError from '@/Jetstream/InputError'
+import JetLabel from '@/Jetstream/Label'
 
 export default {
     components: {
@@ -72,27 +84,29 @@ export default {
         JetButton,
         JetFormSection,
         JetInput,
+        JetCheckbox,
         JetInputError,
         JetLabel,
     },
 
-    props: ["team", "permissions"],
+    props: ['team', 'permissions'],
 
     data() {
         return {
             form: this.$inertia.form({
                 name: this.team.name,
+                is_public: this.team.is_public,
             }),
-        };
+        }
     },
 
     methods: {
         updateTeamName() {
-            this.form.put(route("teams.update", this.team), {
-                errorBag: "updateTeamName",
+            this.form.put(route('teams.update', this.team), {
+                errorBag: 'updateTeamName',
                 preserveScroll: true,
-            });
+            })
         },
     },
-};
+}
 </script>

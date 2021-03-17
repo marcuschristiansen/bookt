@@ -179,6 +179,13 @@
                                                                     {{
                                                                         team.name
                                                                     }}
+                                                                    <span
+                                                                        v-if="
+                                                                            !team.is_public
+                                                                        "
+                                                                        class="text-xs bg-gray-200 rounded py-1 px-2"
+                                                                        >Private</span
+                                                                    >
                                                                 </div>
                                                             </div>
                                                         </jet-dropdown-link>
