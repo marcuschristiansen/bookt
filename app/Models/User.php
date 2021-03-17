@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Traits\JetStream\HasNoPersonalTeams;
+use App\Traits\Jetstream\HasNoPersonalTeams;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
