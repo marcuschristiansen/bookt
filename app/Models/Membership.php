@@ -32,7 +32,7 @@ class Membership extends JetstreamMembership
      */
 //    public function user()
 //    {
-//        return $this->belongsTo(User::class);
+//        return $this->belongsTo(Index::class);
 //    }
 
     /**

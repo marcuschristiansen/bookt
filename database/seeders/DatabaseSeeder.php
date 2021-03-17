@@ -121,7 +121,7 @@ class DatabaseSeeder extends Seeder
             'date' => $this->faker->dateTimeBetween('now', '+1 years')
         ]);
 
-        // User with no team
+        // Index with no team
         $user = User::factory()->create([
             'name' => 'Denis Christiansen',
             'email' => 'denis.christiansen@gmail.com',

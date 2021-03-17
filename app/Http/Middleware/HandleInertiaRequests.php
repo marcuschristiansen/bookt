@@ -52,6 +52,7 @@ class HandleInertiaRequests extends Middleware
                     'all_teams' => Jetstream::hasTeamFeatures() ? $request->user()->allTeams() : null,
                     'memberships' => Jetstream::hasTeamFeatures() ? $request->user()->teams : null,
                     'owned_teams' => Jetstream::hasTeamFeatures() ? $request->user()->ownedTeams : null,
+                    'current_team_role' => Jetstream::hasTeamFeatures() ? ($request->user()->ownsTeam($request->user()->currentTeam) ? 'TeamAdmin' : 'User') : null,
                 ]), [
                     'two_factor_enabled' => ! is_null($request->user()->two_factor_secret),
                 ]);

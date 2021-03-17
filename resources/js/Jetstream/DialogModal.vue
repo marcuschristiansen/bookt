@@ -22,11 +22,9 @@
 </template>
 
 <script>
-import Modal from "./Modal";
+import Modal from './Modal'
 
 export default {
-    emits: ["close"],
-
     components: {
         Modal,
     },
@@ -36,17 +34,17 @@ export default {
             default: false,
         },
         maxWidth: {
-            default: "2xl",
+            default: '2xl',
         },
         closeable: {
             default: true,
         },
     },
-
+    emits: ['close'],
     methods: {
         close() {
-            this.$emit("close");
+            this.$emit('close')
         },
     },
-};
+}
 </script>

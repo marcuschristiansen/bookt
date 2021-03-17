@@ -14,13 +14,12 @@ class BookingsByRole extends Criteria
     public function apply($model, Repository $repository)
     {
         $user = auth()->user();
-        $team = $user->teamRole($user->currentTeam);
 
         if($user->ownsTeam($user->currentTeam)) {
             return $model->where('team_id', $user->currentTeam->getKey());
         }
 
-        if($user->hasTeamRole($user->currentTeam, 'user')) {
+        if($user->hasRole('user')) {
             return $model->where('user_id', $user->getKey());
         }
 

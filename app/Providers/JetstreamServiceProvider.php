@@ -58,14 +58,7 @@ class JetstreamServiceProvider extends ServiceProvider
             'delete',
         ]);
 
-//        Jetstream::role('admin', __('Administrator'), [
-//            'create',
-//            'read',
-//            'update',
-//            'delete',
-//        ])->description(__('Administrator users can perform any action.'));
-
-        Jetstream::role('user', __('User'), [
+        Jetstream::role('user', __('Index'), [
             'create',
             'read',
             'update',

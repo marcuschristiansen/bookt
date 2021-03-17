@@ -65,7 +65,7 @@ class BookingPolicy
      */
     public function delete(User $user, Booking $booking)
     {
-        return $user  === $booking->user() || $user->ownsTeam($booking->team);
+        return $user === $booking->user() || $user->ownsTeam($booking->team);
     }
 
     /**

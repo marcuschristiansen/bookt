@@ -17,7 +17,11 @@
             >
                 <span class="flex items-center">
                     <span class="block truncate">
-                        {{ selectedOption.label }}
+                        {{
+                            selectedOption
+                                ? selectedOption.label
+                                : 'Filter by calendar'
+                        }}
                     </span>
                 </span>
                 <span
@@ -81,7 +85,10 @@
                         Highlighted: "text-white", Not Highlighted: "text-indigo-600"
                       -->
                         <span
-                            v-if="option.id === selectedOption.id"
+                            v-if="
+                                selectedOption &&
+                                option.id === selectedOption.id
+                            "
                             class="absolute inset-y-0 right-0 flex items-center pr-4"
                         >
                             <!-- Heroicon name: check -->

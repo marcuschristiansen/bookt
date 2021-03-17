@@ -62,16 +62,8 @@ class BookingController extends Controller
     {
         $limit = ($request->has('limit')) ? $request->get('limit') : 20;
 
-        $calendar = $request->calendar;
-        if(!$calendar) {
-            $calendar = auth()->user()->currentTeam->calendars->first()->getKey();
-            $request->request->add(['calendar' => $calendar]);
-        }
-
-        $date = $request->date;
-        if(!$date) {
-            $date = Carbon::now()->format('Y-m-d');
-            $request->request->add(['date' => $date]);
+        if(!$request->user()->currentTeam) {
+            return Inertia::render('Bookings/Index');
         }
 
         $bookings = $this->booking
@@ -82,8 +74,8 @@ class BookingController extends Controller
             ->paginate($limit);
 
         return Inertia::render('Bookings/Index', [
-            'date' => Carbon::create($date)->format('Y-m-d'),
-            'calendar' => (int)$calendar,
+            'date' => $request->has('date') ? Carbon::create($request->date)->format('Y-m-d') : Carbon::now()->format('Y-m-d'),
+            'calendar' => $request->has('calendar') ? (int)$request->calendar : '',
             'bookings' => new BookingCollection($bookings)
         ]);
     }

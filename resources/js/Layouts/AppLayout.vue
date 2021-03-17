@@ -29,22 +29,13 @@
                                 </jet-nav-link>
                                 <jet-nav-link
                                     v-if="belongsToAnyTeam"
-                                    :href="
-                                        route('bookings.index', {
-                                            date: formatDate(
-                                                new Date(),
-                                                'YYYY-MM-DD'
-                                            ),
-                                            calendar:
-                                                user.current_team.calendars[0],
-                                        })
-                                    "
+                                    :href="route('bookings.index')"
                                     :active="route().current('bookings.index')"
                                 >
                                     Bookings
                                 </jet-nav-link>
                                 <jet-nav-link
-                                    v-if="user.owns_current_team"
+                                    v-if="$page.props.user.owns_current_team"
                                     :href="route('calendars.index')"
                                     :active="route().current('calendars.index')"
                                 >
@@ -68,7 +59,10 @@
                                                 type="button"
                                                 class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:bg-gray-50 hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150"
                                             >
-                                                {{ user.current_team.name }}
+                                                {{
+                                                    $page.props.user
+                                                        .current_team.name
+                                                }}
 
                                                 <svg
                                                     class="ml-2 -mr-0.5 h-4 w-4"
@@ -107,7 +101,8 @@
                                                     :href="
                                                         route(
                                                             'teams.show',
-                                                            user.current_team
+                                                            $page.props.user
+                                                                .current_team
                                                         )
                                                     "
                                                 >
@@ -133,7 +128,8 @@
                                                 <!-- Team Switcher -->
                                                 <div
                                                     v-if="
-                                                        user.owned_teams.length
+                                                        $page.props.user
+                                                            .owned_teams.length
                                                     "
                                                     class="block px-4 py-2 text-xs text-gray-400"
                                                 >
@@ -141,7 +137,8 @@
                                                 </div>
 
                                                 <template
-                                                    v-for="team in user.owned_teams"
+                                                    v-for="team in $page.props
+                                                        .user.owned_teams"
                                                     :key="team.id"
                                                 >
                                                     <form
@@ -161,7 +158,10 @@
                                                                 <svg
                                                                     v-if="
                                                                         team.id ==
-                                                                        user.current_team_id
+                                                                        $page
+                                                                            .props
+                                                                            .user
+                                                                            .current_team_id
                                                                     "
                                                                     class="mr-2 h-5 w-5 text-green-400"
                                                                     fill="none"
@@ -186,7 +186,8 @@
                                                 </template>
                                                 <div
                                                     v-if="
-                                                        user.memberships.length
+                                                        $page.props.user
+                                                            .memberships.length
                                                     "
                                                     class="block px-4 py-2 text-xs text-gray-400"
                                                 >
@@ -194,7 +195,8 @@
                                                 </div>
 
                                                 <template
-                                                    v-for="team in user.memberships"
+                                                    v-for="team in $page.props
+                                                        .user.memberships"
                                                     :key="team.id"
                                                 >
                                                     <form
@@ -214,7 +216,10 @@
                                                                 <svg
                                                                     v-if="
                                                                         team.id ==
-                                                                        user.current_team_id
+                                                                        $page
+                                                                            .props
+                                                                            .user
+                                                                            .current_team_id
                                                                     "
                                                                     class="mr-2 h-5 w-5 text-green-400"
                                                                     fill="none"
@@ -256,8 +261,11 @@
                                         >
                                             <img
                                                 class="h-8 w-8 rounded-full object-cover"
-                                                :src="user.profile_photo_url"
-                                                :alt="user.name"
+                                                :src="
+                                                    $page.props.user
+                                                        .profile_photo_url
+                                                "
+                                                :alt="$page.props.user.name"
                                             />
                                         </button>
 
@@ -269,7 +277,7 @@
                                                 type="button"
                                                 class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
                                             >
-                                                {{ user.name }}
+                                                {{ $page.props.user.name }}
 
                                                 <svg
                                                     class="ml-2 -mr-0.5 h-4 w-4"
@@ -383,18 +391,13 @@
                         </jet-responsive-nav-link>
                         <jet-responsive-nav-link
                             v-if="belongsToAnyTeam"
-                            :href="
-                                route('bookings.index', {
-                                    date: formatDate(new Date(), 'YYYY-MM-DD'),
-                                    calendar: user.current_team.calendars[0],
-                                })
-                            "
+                            :href="route('bookings.index')"
                             :active="route().current('bookings.index')"
                         >
                             Bookings
                         </jet-responsive-nav-link>
                         <jet-responsive-nav-link
-                            v-if="user.owns_current_team"
+                            v-if="$page.props.user.owns_current_team"
                             :href="route('calendars.index')"
                             :active="route().current('calendars.index')"
                         >
@@ -413,8 +416,8 @@
                             >
                                 <img
                                     class="h-10 w-10 rounded-full object-cover"
-                                    :src="user.profile_photo_url"
-                                    :alt="user.name"
+                                    :src="$page.props.user.profile_photo_url"
+                                    :alt="$page.props.user.name"
                                 />
                             </div>
 
@@ -422,10 +425,10 @@
                                 <div
                                     class="font-medium text-base text-gray-800"
                                 >
-                                    {{ user.name }}
+                                    {{ $page.props.user.name }}
                                 </div>
                                 <div class="font-medium text-sm text-gray-500">
-                                    {{ user.email }}
+                                    {{ $page.props.user.email }}
                                 </div>
                             </div>
                         </div>
@@ -469,7 +472,10 @@
                                 <jet-responsive-nav-link
                                     v-if="belongsToAnyTeam"
                                     :href="
-                                        route('teams.show', user.current_team)
+                                        route(
+                                            'teams.show',
+                                            $page.props.user.current_team
+                                        )
                                     "
                                     :active="route().current('teams.show')"
                                 >
@@ -487,14 +493,14 @@
 
                                 <!-- Team Switcher -->
                                 <div
-                                    v-if="user.owned_teams.length"
+                                    v-if="$page.props.user.owned_teams.length"
                                     class="block px-4 py-2 text-xs text-gray-400"
                                 >
                                     My Teams
                                 </div>
 
                                 <template
-                                    v-for="team in user.owned_teams"
+                                    v-for="team in $page.props.user.owned_teams"
                                     :key="team.id"
                                 >
                                     <form @submit.prevent="switchToTeam(team)">
@@ -506,7 +512,8 @@
                                                 <svg
                                                     v-if="
                                                         team.id ==
-                                                        user.current_team_id
+                                                        $page.props.user
+                                                            .current_team_id
                                                     "
                                                     class="mr-2 h-5 w-5 text-green-400"
                                                     fill="none"
@@ -526,14 +533,14 @@
                                     </form>
                                 </template>
                                 <div
-                                    v-if="user.memberships.length"
+                                    v-if="$page.props.user.memberships.length"
                                     class="block px-4 py-2 text-xs text-gray-400"
                                 >
                                     My Memberships
                                 </div>
 
                                 <template
-                                    v-for="team in user.memberships"
+                                    v-for="team in $page.props.user.memberships"
                                     :key="team.id"
                                 >
                                     <form @submit.prevent="switchToTeam(team)">
@@ -545,7 +552,8 @@
                                                 <svg
                                                     v-if="
                                                         team.id ==
-                                                        user.current_team_id
+                                                        $page.props.user
+                                                            .current_team_id
                                                     "
                                                     class="mr-2 h-5 w-5 text-green-400"
                                                     fill="none"
@@ -603,7 +611,6 @@ export default {
         JetNavLink,
         JetResponsiveNavLink,
     },
-    props: ['user'],
     data() {
         return {
             showingNavigationDropdown: false,
@@ -611,7 +618,10 @@ export default {
     },
     computed: {
         belongsToAnyTeam() {
-            return this.user.owned_teams.length || this.user.memberships.length
+            return (
+                this.$page.props.user.owned_teams.length ||
+                this.$page.props.user.memberships.length
+            )
         },
     },
     methods: {
