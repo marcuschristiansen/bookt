@@ -18,7 +18,6 @@ class Team extends JetstreamTeam
      * @var array
      */
     protected $casts = [
-        'is_public' => 'boolean',
         'personal_team' => 'boolean',
     ];
 
@@ -29,7 +28,6 @@ class Team extends JetstreamTeam
      */
     protected $fillable = [
         'name',
-        'is_public',
         'personal_team',
     ];
 
@@ -65,5 +63,13 @@ class Team extends JetstreamTeam
     public function bookings()
     {
         return $this->hasMany(Booking::class);
+    }
+
+    /**
+     * Get the properties for this team
+     */
+    public function properties()
+    {
+        return $this->hasMany(Property::class);
     }
 }

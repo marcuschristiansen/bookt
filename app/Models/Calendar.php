@@ -18,28 +18,28 @@ class Calendar extends Model
      */
     protected $fillable = [
         'name',
-        'team_id'
+        'property_id'
     ];
 
     /**
      * @var string[]
      */
-    protected $withable = ['team'];
+    protected $withable = ['property'];
 
     /**
-     * Get the team that owns the calendar.
+     * Get the property that owns the calendar.
      */
-    public function team()
+    public function property()
     {
-        return $this->belongsTo(Team::class);
+        return $this->belongsTo(Property::class);
     }
 
     /**
-     * Get the calendars slots
+     * Get all the passes for this calendar
      *
      */
-    public function slots()
+    public function passes()
     {
-        return $this->hasMany(Slot::class)->orderBy('start_time');
+        return $this->belongsToMany(Pass::class);
     }
 }

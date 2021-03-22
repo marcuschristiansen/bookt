@@ -21,13 +21,11 @@ class UpdateTeamName implements UpdatesTeamNames
         Gate::forUser($user)->authorize('update', $team);
 
         Validator::make($input, [
-            'name' => ['required', 'string', 'max:255'],
-            'is_public' => ['boolean']
+            'name' => ['required', 'string', 'max:255']
         ])->validateWithBag('updateTeamName');
 
         $team->forceFill([
-            'name' => $input['name'],
-            'is_public' => $input['is_public']
+            'name' => $input['name']
         ])->save();
     }
 }

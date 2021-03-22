@@ -25,8 +25,6 @@ class SlotCreate extends FormRequest
     public function rules()
     {
         return [
-            'calendar_id' => ['exists:calendars,id'],
-            'day_id' => ['required', 'integer', Rule::in(range(1,7))],
             'max_bookings' => ['required', 'integer', 'min:0'],
             'start_time' => ['required', 'string', 'date_format:H:i'],
             'end_time' => ['required', 'string', 'date_format:H:i'],

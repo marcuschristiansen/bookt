@@ -17,8 +17,7 @@ class Slot extends Model
      * @var array
      */
     protected $fillable = [
-        'calendar_id',
-        'day_id',
+        'team_id',
         'start_time',
         'end_time',
         'max_bookings'
@@ -53,11 +52,11 @@ class Slot extends Model
     ];
 
     /**
-     * Get the calendar that owns the slot.
+     * Get the team that this slot belongs to
      */
-    public function calendar()
+    public function team()
     {
-        return $this->belongsTo(Calendar::class);
+        return $this->belongsTo(Team::class);
     }
 
     /**
@@ -66,6 +65,14 @@ class Slot extends Model
     public function bookings()
     {
         return $this->hasMany(Booking::class);
+    }
+
+    /**
+     * Get all the passes that this slot belongs to
+     */
+    public function passes()
+    {
+        return $this->belongsToMany(Pass::class);
     }
 }
 

@@ -12,11 +12,6 @@ class CalendarFilter extends ModelFilter
      */
     public $relations = [];
 
-//    public function search($value)
-//    {
-//        return $this->whereRaw("name LIKE '%$value%'");
-//    }
-
     /**
      * @param $value
      * @return CalendarFilter

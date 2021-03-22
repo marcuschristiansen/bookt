@@ -15,8 +15,7 @@ class CreateSlotsTable extends Migration
     {
         Schema::create('slots', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('calendar_id');
-            $table->unsignedInteger('day_id');
+            $table->foreignId('team_id')->index();
             $table->time('start_time');
             $table->time('end_time');
             $table->unsignedInteger('max_bookings')->nullable();

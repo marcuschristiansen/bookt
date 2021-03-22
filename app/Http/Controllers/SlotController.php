@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Slot\SlotCreate;
 use App\Http\Resources\Slot\SlotCollection;
+use App\Jobs\Slots\CreateSlot;
 use App\Models\Calendar;
 use App\Models\Slot;
 use App\Repositories\Criteria\BelongsToCalendar;
@@ -63,7 +64,7 @@ class SlotController extends Controller
      */
     public function store(SlotCreate $request): RedirectResponse
     {
-        $this->slot->create($request->validated());
+        $slot = CreateSlot::dispatchNow($request->validated());
 
         return redirect()->back()->withFlash('Slot Created Successfully.');
     }

@@ -18,7 +18,7 @@ class Booking extends Model
      */
     protected $fillable = [
         'user_id',
-        'team_id',
+        'property_id',
         'slot_id',
         'date'
     ];
@@ -26,7 +26,7 @@ class Booking extends Model
     /**
      * @var string[]
      */
-    protected $withable = ['user', 'team', 'slot'];
+    protected $withable = ['user', 'property', 'slot'];
 
     /**
      * The attributes that should be cast.
@@ -46,11 +46,11 @@ class Booking extends Model
     }
 
     /**
-     * Get the team that owns the booking.
+     * Get the property that owns the booking.
      */
-    public function team()
+    public function property()
     {
-        return $this->belongsTo(Team::class);
+        return $this->belongsTo(Property::class);
     }
 
     /**

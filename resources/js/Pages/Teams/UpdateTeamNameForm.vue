@@ -43,15 +43,15 @@
             </div>
 
             <!-- Private/Public -->
-            <div class="col-span-6 sm:col-span-4">
-                <label class="flex items-center">
-                    <jet-checkbox
-                        v-model:checked="form.is_public"
-                        :value="form.is_public"
-                    />
-                    <span class="ml-2 text-sm text-gray-600">Is public?</span>
-                </label>
-            </div>
+            <!--            <div class="col-span-6 sm:col-span-4">-->
+            <!--                <label class="flex items-center">-->
+            <!--                    <jet-checkbox-->
+            <!--                        v-model:checked="form.is_public"-->
+            <!--                        :value="form.is_public"-->
+            <!--                    />-->
+            <!--                    <span class="ml-2 text-sm text-gray-600">Is public?</span>-->
+            <!--                </label>-->
+            <!--            </div>-->
         </template>
 
         <template v-if="permissions.canUpdateTeam" #actions>
@@ -95,7 +95,7 @@ export default {
         return {
             form: this.$inertia.form({
                 name: this.team.name,
-                is_public: this.team.is_public,
+                // is_public: this.team.is_public,
             }),
         }
     },
