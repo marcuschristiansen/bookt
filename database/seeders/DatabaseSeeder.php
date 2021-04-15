@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Http\Resources\Slot\SlotCollection;
-use App\Models\Booking;
 use App\Models\Calendar;
+use App\Models\Pass;
+use App\Models\Property;
 use App\Models\Slot;
 use App\Models\Team;
 use App\Models\User;
@@ -37,26 +37,73 @@ class DatabaseSeeder extends Seeder
     }
 
     /**
-     * @param Calendar $calendar
-     * @return array
+     * Setup team for a user including properties and calendars
+     *
+     * @param User $user
+     * @return \Illuminate\Support\HigherOrderTapProxy|mixed
      * @throws \Exception
      */
-    private function createSlots(Calendar $calendar): array
+    private function createTeam(User $user)
     {
-        $calendars = [];
-        foreach (range(1, 7) as $day) {
-            foreach(self::TIME_SLOTS as $key => $timeSlot) {
-                $calendars[] = Slot::factory()->create([
-                    'calendar_id' => $calendar,
-                    'day_id' => $day,
-                    'start_time' => $timeSlot,
-                    'end_time' => (array_key_exists(++$key, self::TIME_SLOTS)) ? self::TIME_SLOTS[$key++] : '18:00',
-                    'max_bookings' => random_int(1, 15)
-                ]);
-            }
-        }
+        // Create a team for this team admin
+        return tap(Team::factory()->create([
+            'user_id' => $user->getKey(),
+            'name' => explode(' ', $user->name, 2)[0]."'s Team",
+        ]), function(Team $team) {
+            // Create 2 properties for this team
+            tap(Property::factory()->create([
+                'team_id' => $team,
+                'name' => $team->name . ' Property',
+                'is_private' => true
+            ]), function(Property $property) {
+                // Create 3 calendars for each property
+//                Calendar::factory(3)->create(['property_id' => $property->getKey()]);
 
-        return $calendars;
+            });
+            tap(Property::factory()->create([
+                'team_id' => $team,
+                'name' => $team->name . ' Property Number 2',
+                'is_private' => false
+            ]), function(Property $property) {
+                // Create 3 calendars for each property
+                Calendar::factory(3)->create(['property_id' => $property->getKey()]);
+            });
+            // Create slots
+//            $this->createSlots($team);
+        });
+    }
+
+    /**
+     * @param Team $team
+     * @return void
+     * @throws \Exception
+     */
+    private function createSlots(Team $team): void
+    {
+        foreach(self::TIME_SLOTS as $key => $timeSlot) {
+            tap(Slot::factory()->create([
+                'team_id' => $team,
+                'start_time' => $timeSlot,
+                'end_time' => (array_key_exists(++$key, self::TIME_SLOTS)) ? self::TIME_SLOTS[$key++] : '18:00',
+                'max_bookings' => random_int(1, 15)
+            ]), function(Slot $slot) use ($team) {
+                // Get the default pass created for this slot
+                $defaultPass = Pass::create(['name' => $slot->id . ' Default Pass', 'team_id' => $slot->team->getKey()]);
+//                $customDate = rand(0,1);
+                // Create a pass for either 3 days in the week or 2 custom dates
+//                $passRange = PassRange::create([
+//                    'days' => (!$customDate) ? collect(Pass::DAYS)->random(3)->toArray() : null,
+//                    'dates' => ($customDate) ? [$this->faker->dateTimeBetween('now', '+2 months')->format('Y-m-d'), $this->faker->dateTimeBetween('now', '+2 months')->format('Y-m-d')] : null,
+//                ]);
+                // Create relationships
+//                $defaultPass->synchronisePassRanges([$passRange->getKey()]);
+
+                $defaultPass->slots()->sync($slot->getKey());
+
+                $calendar = $team->properties->random()->calendars->random();
+                $defaultPass->calendars()->sync($calendar->getKey());
+            });
+        }
     }
 
     /**
@@ -69,7 +116,9 @@ class DatabaseSeeder extends Seeder
         // Roles and permissions
         $this->call(RolesAndPermissionsSeeder::class);
 
-        // Super Admin
+        /**
+         * SUPER ADMIN USERS
+         */
         $superAdmin = User::factory()->create([
             'name' => 'Marcus Christiansen',
             'email' => env('EMAIL'),
@@ -77,80 +126,80 @@ class DatabaseSeeder extends Seeder
         ]);
         $superAdmin->assignRole(Role::findByName('super-admin'));
 
-        // Team Admin
+        /**
+         * TEAM ADMIN USERS
+         */
         $teamAdmin = User::factory()->create([
             'name' => 'Meghnaaz Williams',
             'email' => 'meghnaaz.williams@gmail.com',
             'password' => Hash::make(env('PASSWORD')),
         ]);
         $teamAdmin->assignRole(Role::findByName('team-admin'));
-        // 1 private team and 3 public teams
-        Team::factory()->create([
-            'is_public' => false,
-            'user_id' => $teamAdmin->getKey()
-        ])->each(function($team) {
-            Calendar::factory()->create(['team_id' => $team->getKey()])->each(function($calendar) {
-                $this->createSlots($calendar);
-            });
-        });
-        Team::factory(3)->create([
-            'user_id' => $teamAdmin->getKey()
-        ])->each(function($team) {
-            Calendar::factory()->create(['team_id' => $team->getKey()])->each(function($calendar) {
-                $this->createSlots($calendar);
-            });
-        });
+        $team = $this->createTeam($teamAdmin);
 
-        $teams = Team::where('user_id', $teamAdmin->getKey())->get();
-
-        // Calendars
-        Calendar::factory(20)->create()->each(function($calendar) {
-            $this->createSlots($calendar);
-        });
-
-        // Users
-        $user = User::factory()->create([
-            'name' => 'Pieter Mentz',
-            'email' => 'pieter.mentz@gmail.com',
-            'password' => Hash::make('password')
-        ]);
-        $user->assignRole(Role::findByName('user'));
-        $team = $teams->random();
-        $user->teams()->sync([$team->getKey() => ['role' => 'user']]);
-        $calendar = $team->calendars->random();
-        $slot = $calendar->slots->random();
-        Booking::factory(50)->create([
-            'user_id' => $user,
-            'team_id' => $team,
-            'slot_id' => $slot,
-            'date' => $this->faker->dateTimeBetween('now', '+1 years')
-        ]);
-
-        // Index with no team
-        $user = User::factory()->create([
+        $teamAdminTwo = User::factory()->create([
             'name' => 'Denis Christiansen',
             'email' => 'denis.christiansen@gmail.com',
-            'password' => Hash::make('password')
+            'password' => Hash::make(env('PASSWORD')),
         ]);
-        $user->assignRole(Role::findByName('user'));
+        $teamAdminTwo->assignRole(Role::findByName('team-admin'));
+        $this->createTeam($teamAdminTwo);
 
-        // More dummy user
-        $users = User::factory(10)->create();
-        $users->each(function($user) use ($teams) {
-            $user->assignRole(Role::findByName('user'));
+//        /**
+//         * USERS
+//         */
+//        $user = User::factory()->create([
+//            'name' => 'Pieter Mentz',
+//            'email' => 'pieter.mentz@gmail.com',
+//            'password' => Hash::make('password')
+//        ]);
+//        // Create personal team
+//        Team::create([
+//            'user_id' => $user->getKey(),
+//            'name' => explode(' ', $user->name, 2)[0]."'s Team",
+//            'personal_team' => true,
+//        ]);
+//        // Assign user role
+//        $user->assignRole(Role::findByName('user'));
+//        // Add user to 2 properties
+//        $properties = Property::all()->random(2);
+//        $user->addToProperties($properties);
+        // Create between 1-15 bookings
+//        foreach (range(1,rand(2,15)) as $n) {
+//            $property = $properties->random();
+//            $pass = $property->team->passes->random();
+//            Booking::factory()->create([
+//                'user_id' => $user,
+//                'property_id' => $property,
+//                'pass_id' => $pass,
+//                'date' => $this->faker->dateTimeBetween('now', '+2 months')
+//            ]);
+//        }
 
-            $team = $teams->random();
-            $user->teams()->sync([$team->getKey() => ['role' => 'user']]);
-
-            $calendar = $team->calendars->random();
-            $slot = $calendar->slots->random();
-            Booking::factory(10)->create([
-                'user_id' => $user,
-                'team_id' => $team,
-                'slot_id' => $slot,
-                'date' => $this->faker->dateTimeBetween('now', '+1 years')
-            ]);
-        });
-
+//        // Create additional 50 users
+//        User::factory(50)->create()->each(function(User $user) {
+//            // Create personal team
+//            Team::create([
+//                'user_id' => $user->getKey(),
+//                'name' => explode(' ', $user->name, 2)[0]."'s Team",
+//                'personal_team' => true,
+//            ]);
+//            // Assign user role
+//            $user->assignRole(Role::findByName('user'));
+//            // Add user to 2 properties
+//            $properties = Property::all()->random(2);
+//            $user->addToProperties($properties);
+//            // Create between 1-15 bookings
+////            foreach (range(1,15) as $n) {
+////                $property = $properties->random();
+////                $pass = $property->team->passes->random();
+////                Booking::factory()->create([
+////                    'user_id' => $user,
+////                    'property_id' => $property,
+////                    'pass_id' => $pass,
+////                    'date' => $this->faker->dateTimeBetween('now', '+2 months')
+////                ]);
+////            }
+//        });
     }
 }

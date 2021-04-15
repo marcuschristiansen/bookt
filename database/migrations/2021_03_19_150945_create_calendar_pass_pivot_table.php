@@ -15,9 +15,9 @@ class CreateCalendarPassPivotTable extends Migration
     {
         Schema::create('calendar_pass', function (Blueprint $table) {
             $table->unsignedBigInteger('calendar_id')->index();
-            $table->foreign('calendar_id')->references('id')->on('calendar')->onDelete('cascade');
+            $table->foreign('calendar_id')->references('id')->on('calendars')->onDelete('cascade');
             $table->unsignedBigInteger('pass_id')->index();
-            $table->foreign('pass_id')->references('id')->on('pass')->onDelete('cascade');
+            $table->foreign('pass_id')->references('id')->on('passes')->onDelete('cascade');
             $table->primary(['calendar_id', 'pass_id']);
         });
     }

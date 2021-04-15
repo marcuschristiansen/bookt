@@ -28,18 +28,18 @@ class Membership extends JetstreamMembership
     public $incrementing = true;
 
     /**
-     * Get the user for this membership
-     */
-//    public function user()
-//    {
-//        return $this->belongsTo(Index::class);
-//    }
-
-    /**
      * Get the team for this membership
      */
-//    public function team()
-//    {
-//        return $this->belongsTo(Team::class);
-//    }
+    public function team()
+    {
+        return $this->belongsTo(Team::class);
+    }
+
+    /**
+     * Get all the users who are in this property
+     */
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
 }

@@ -58,13 +58,17 @@ class JetstreamServiceProvider extends ServiceProvider
             'delete',
         ]);
 
-        Jetstream::role('user', __('User'), [
+        Jetstream::role('team-admin', __('Team Admin'), [
             'create',
             'read',
             'update',
             'delete'
+        ])->description(__('Team admins have the ability to read, create, update and delete.'));
+
+        Jetstream::role('user', __('User'), [
+            'create',
+            'read',
+            'update',
         ])->description(__('Users have the ability to read, create, and update.'));
-
-
     }
 }

@@ -1,7 +1,7 @@
 <?php
 namespace App\Repositories\Criteria;
 
-use App\Repositories\Criteria\Criteria;
+use App\Repositories\Contracts\RepositoryInterface;
 use App\Repositories\Contracts\RepositoryInterface as Repository;
 
 class RequestWith extends Criteria

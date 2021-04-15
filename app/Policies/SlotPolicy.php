@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Calendar;
 use App\Models\Slot;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -18,7 +19,7 @@ class SlotPolicy
      */
     public function viewAny(User $user)
     {
-        //
+        return $user->can('view slots');
     }
 
     /**
@@ -30,7 +31,12 @@ class SlotPolicy
      */
     public function view(User $user, Slot $slot)
     {
-        //
+        return $user->can('view slots') &&
+            (
+                $slot->calendar->isInUsersTeams($user) ||
+                $slot->calendar->propertyIsPublic() ||
+                $slot->calendar->isInPropertyMembershipOfUser($user)
+            );
     }
 
     /**
@@ -39,9 +45,13 @@ class SlotPolicy
      * @param  \App\Models\User  $user
      * @return mixed
      */
-    public function create(User $user)
+    public function create(User $user, Calendar $calendar)
     {
-        //
+        return $user->can('create slots') &&
+            (
+                $calendar->property->isInUsersTeams($user) ||
+                $calendar->property->isOwnedByUser($user)
+            );
     }
 
     /**
@@ -53,7 +63,11 @@ class SlotPolicy
      */
     public function update(User $user, Slot $slot)
     {
-        //
+        return $user->can('edit slots') &&
+            (
+                $slot->calendar->property->isOwnedByUser($user) ||
+                $slot->calendar->property->isInUsersTeams($user)
+            );
     }
 
     /**
@@ -65,7 +79,11 @@ class SlotPolicy
      */
     public function delete(User $user, Slot $slot)
     {
-        return true;
+        return $user->can('delete slots') &&
+            (
+                $slot->calendar->property->isOwnedByUser($user) ||
+                $slot->calendar->property->isInUsersTeams($user)
+            );
     }
 
     /**

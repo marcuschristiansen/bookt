@@ -18,6 +18,7 @@ class CreateCalendarsTable extends Migration
             $table->foreignId('property_id');
             $table->text('name');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

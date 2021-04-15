@@ -2,9 +2,7 @@
 
 namespace Tests\Feature\Bookings;
 
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class GetAllBookingsTest extends TestCase
@@ -15,7 +13,7 @@ class GetAllBookingsTest extends TestCase
     {
         parent::setUp();
 
-        $this->setUpTestData();
+//        $this->setUpTestData();
     }
 
     /**
@@ -23,11 +21,26 @@ class GetAllBookingsTest extends TestCase
      *
      * @return void
      */
-    public function test_get_all_bookings_that_belong_to_team()
+    public function testGetAllBookingsForProperty()
     {
-        $response = $this->actingAs($this->teamAdminOne)->get('/bookings');
+        $this->markTestSkipped('Incomplete');
 
-        $response->assertStatus(200);
+//        $properties = Property::where('team_id', $this->teamAdminOne->currentTeam->getKey())->get();
+//        $properties->each(function(Property $property) {
+//            $bookings = Booking::where('property_id', $property->getKey())->get();
+//
+//            $this->actingAs($this->teamAdminOne)->get('/bookings?property=' . $property->getKey())
+//                ->assertInertia(fn (Assert $page) => $page
+//                    ->component('Bookings/Index')
+//                    ->has('bookings.data', null, fn (Assert $page) => $page
+//                        ->has('type')
+//                        ->has('id')
+//                        ->has('links')
+//                        ->where('attributes.property_id', $property->getKey())
+//                    )
+//                );
+//        });
+//        $response->assertStatus(200);
     }
 
     /**
@@ -35,22 +48,12 @@ class GetAllBookingsTest extends TestCase
      *
      * @return void
      */
-    public function test_get_all_bookings_that_belong_to_user()
+    public function testGetAllBookingsForUser()
     {
-        $response = $this->actingAs($this->userOne)->get('/bookings');
+        $this->markTestSkipped('Incomplete');
 
-        $response->assertStatus(200);
-    }
-
-    /**
-     * Get all the bookings for a user
-     *
-     * @return void
-     */
-    public function test_get_all_bookings_that_belong_to_user_with_no_teams()
-    {
-        $response = $this->actingAs($this->userThree)->get('/bookings');
-
-        $response->assertStatus(200);
+//        $response = $this->actingAs($this->userOne)->get('/bookings');
+//
+//        $response->assertStatus(200);
     }
 }

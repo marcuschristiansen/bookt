@@ -15,11 +15,14 @@ class CreateSlotsTable extends Migration
     {
         Schema::create('slots', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('team_id')->index();
+            $table->foreignId('calendar_id')->index();
+            $table->integer('day_id');
             $table->time('start_time');
             $table->time('end_time');
             $table->unsignedInteger('max_bookings')->nullable();
+            $table->float('cost')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

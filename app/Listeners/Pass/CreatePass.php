@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Listeners\Pass;
 
 use App\Events\SlotCreated;
 use App\Models\Pass;
@@ -24,14 +24,17 @@ class CreatePass
      * Handle the event.
      *
      * @param  SlotCreated  $event
-     * @return void
+     * @return Pass $pass
      */
     public function handle(SlotCreated $event)
     {
-        $this->pass->create([
-            'name' => 'Slot ' . $event->slot->start_time . '-' . $event->slot->end_time . '-' . now()
+        $pass = $this->pass->create([
+            'team_id' => $event->slot->team_id,
+            'name' => 'Slot ' . $event->slot->start_time . '-' . $event->slot->end_time
         ]);
 
-        $this->pass->slots()->sync($event->slot->getKey());
+        $pass->slots()->sync($event->slot);
+
+        return $pass;
     }
 }

@@ -17,8 +17,12 @@ class CreatePropertiesTable extends Migration
             $table->id();
             $table->foreignId('team_id')->index();
             $table->text('name');
-            $table->boolean('is_public')->default(true);
+            $table->longText('description')->nullable();
+            $table->text('address')->nullable();
+            $table->text('contact_number')->nullable();
+            $table->boolean('is_private')->default(true);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

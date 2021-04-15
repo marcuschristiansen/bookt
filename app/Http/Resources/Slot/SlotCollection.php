@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\Slot;
 
-use App\Http\Resources\Booking\BookingResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class SlotCollection extends ResourceCollection

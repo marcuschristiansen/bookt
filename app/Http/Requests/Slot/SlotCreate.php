@@ -24,10 +24,13 @@ class SlotCreate extends FormRequest
      */
     public function rules()
     {
+        $x = [];
         return [
-            'max_bookings' => ['required', 'integer', 'min:0'],
+            'max_bookings' => ['nullable', 'integer', 'min:0'],
             'start_time' => ['required', 'string', 'date_format:H:i'],
             'end_time' => ['required', 'string', 'date_format:H:i'],
+            'cost' => ['nullable', 'min:0'],
+            'day_id' => ['required', Rule::in([0,1,2,3,4,5,6]),]
         ];
     }
 }

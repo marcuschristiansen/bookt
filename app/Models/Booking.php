@@ -3,13 +3,17 @@
 namespace App\Models;
 
 use App\Traits\HasConditionalWith;
+use App\Traits\HasPasses;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Booking extends Model
 {
-    use HasFactory, Filterable, HasConditionalWith;
+    use HasFactory;
+    use HasPasses;
+    use Filterable;
+    use HasConditionalWith;
 
     /**
      * The attributes that are mass assignable.
@@ -19,7 +23,7 @@ class Booking extends Model
     protected $fillable = [
         'user_id',
         'property_id',
-        'slot_id',
+        'pass_id',
         'date'
     ];
 
@@ -38,14 +42,6 @@ class Booking extends Model
     ];
 
     /**
-     * Get the user that owns the booking.
-     */
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    /**
      * Get the property that owns the booking.
      */
     public function property()
@@ -54,10 +50,18 @@ class Booking extends Model
     }
 
     /**
-     * Get the slot that owns the booking.
+     * Get the pass that owns the booking.
      */
-    public function slot()
+    public function pass()
     {
-        return $this->belongsTo(Slot::class);
+        return $this->belongsTo(Pass::class);
+    }
+
+    /**
+     * Get the user that owns the booking.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

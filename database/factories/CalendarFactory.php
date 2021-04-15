@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Calendar;
-use App\Models\Team;
+use App\Models\Property;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CalendarFactory extends Factory
@@ -23,7 +23,7 @@ class CalendarFactory extends Factory
     public function definition()
     {
         return [
-            'team_id' => Team::all()->random(),
+            'property_id' => Property::all()->random(),
             'name' => $this->faker->company,
         ];
     }

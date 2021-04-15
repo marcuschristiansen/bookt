@@ -37,6 +37,7 @@
         "font-awesome": "^4.7.0",
         "moment": "^2.29.1",
         "v-calendar": "^3.0.0-alpha.3",
+        "vue-the-mask": "^0.11.1",
         "vue3-datepicker": "^0.2.4",
         "vue3-timepicker": "^1.0.0-beta.2"
     }

@@ -21,9 +21,9 @@ class SlotCreated
     public $slot;
 
     /**
-     * Create a new event instance.
+     * SlotCreated constructor.
      *
-     * @return void
+     * @param Slot $slot
      */
     public function __construct(Slot $slot)
     {

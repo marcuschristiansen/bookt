@@ -3,13 +3,23 @@
 namespace App\Models;
 
 use App\Traits\HasConditionalWith;
+use App\Traits\HasPasses;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Slot extends Model
 {
-    use HasFactory, Filterable, HasConditionalWith;
+    use HasFactory;
+    use HasPasses;
+    use Filterable;
+    use HasConditionalWith;
+    use SoftDeletes;
+
+    const DAYS = [
+        'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -17,10 +27,12 @@ class Slot extends Model
      * @var array
      */
     protected $fillable = [
-        'team_id',
+        'calendar_id',
+        'day_id',
         'start_time',
         'end_time',
-        'max_bookings'
+        'max_bookings',
+        'cost'
     ];
 
     /**
@@ -36,43 +48,30 @@ class Slot extends Model
     /**
      * @var string[]
      */
-    protected $withable = ['calendar', 'bookings'];
+    protected $withable = ['calendar'];
 
     /**
-     * Days of the week
+     * Get the calendar that this slot belongs to
      */
-    public const DAYS = [
-        1 => 'Monday',
-        2 => 'Tuesday',
-        3 => 'Wednesday',
-        4 => 'Thursday',
-        5 => 'Friday',
-        6 => 'Saturday',
-        7 => 'Sunday',
-    ];
-
-    /**
-     * Get the team that this slot belongs to
-     */
-    public function team()
+    public function calendar()
     {
-        return $this->belongsTo(Team::class);
+        return $this->belongsTo(Calendar::class);
     }
 
     /**
-     * Get all the bookings for this slot
-     */
-    public function bookings()
-    {
-        return $this->hasMany(Booking::class);
-    }
-
-    /**
-     * Get all the passes that this slot belongs to
+     * Get all the passes that own this slot
      */
     public function passes()
     {
-        return $this->belongsToMany(Pass::class);
+//        return $this->belongsToMany(Pass::class);
+    }
+
+    /**
+     * @param Calendar $calendar
+     */
+    public function whereCalendar(Calendar $calendar)
+    {
+        return $this->where('calendar_id', $calendar->getKey());
     }
 }
 

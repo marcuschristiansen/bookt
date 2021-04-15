@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Traits\HasBookings;
+use App\Traits\HasPasses;
+use App\Traits\HasProperties;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Jetstream\Events\TeamCreated;
 use Laravel\Jetstream\Events\TeamDeleted;
@@ -11,6 +14,9 @@ use Laravel\Jetstream\Team as JetstreamTeam;
 class Team extends JetstreamTeam
 {
     use HasFactory;
+    use HasBookings;
+    use HasProperties;
+    use HasPasses;
 
     /**
      * The attributes that should be cast to native types.
@@ -27,16 +33,10 @@ class Team extends JetstreamTeam
      * @var array
      */
     protected $fillable = [
+        'user_id',
         'name',
         'personal_team',
     ];
-
-    /**
-     * Always return the calendars for this booking
-     *
-     * @var string[]
-     */
-    protected $with = ['calendars'];
 
     /**
      * The event map for the model.
@@ -50,23 +50,7 @@ class Team extends JetstreamTeam
     ];
 
     /**
-     * Get the calendars that belong to this team
-     */
-    public function calendars()
-    {
-        return $this->hasMany(Calendar::class);
-    }
-
-    /**
-     * Get the bookings for this team
-     */
-    public function bookings()
-    {
-        return $this->hasMany(Booking::class);
-    }
-
-    /**
-     * Get the properties for this team
+     * Get the properties that this user is a member of
      */
     public function properties()
     {

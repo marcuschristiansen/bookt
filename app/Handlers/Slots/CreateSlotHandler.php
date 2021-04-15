@@ -2,16 +2,22 @@
 
 namespace App\Handlers\Slots;
 
+use App\Events\SlotCreated;
+use App\Jobs\Calendars\CreateCalendar;
+use App\Jobs\Properties\CreateProperty;
 use App\Jobs\Slots\CreateSlot;
+use App\Models\Property;
 use App\Models\Slot;
+use App\Repositories\CalendarsRepository;
+use App\Repositories\PropertiesRepository;
 use App\Repositories\SlotsRepository;
 
 class CreateSlotHandler
 {
     /**
-     * @var Slot $slot
+     * @var SlotsRepository $slot
      */
-    protected $slot;
+    protected SlotsRepository $slot;
 
     public function __construct(SlotsRepository $slot)
     {
@@ -19,15 +25,18 @@ class CreateSlotHandler
     }
 
     /**
-     * @param CreateSlot $event
+     * @param CreateSlot $command
+     * @return mixed
      */
     public function handle(CreateSlot $command)
     {
-        $request = $command->request;
-        $fields = array_merge($request->all(), [
-            'user_id' => auth()->user()
+        $slot = $command->slot;
+        $calendarId = $command->calendarId;
+
+        $fields = array_merge($slot, [
+            'calendar_id' => $calendarId,
         ]);
 
-        $this->slot->create($fields);
+        return $this->slot->create($fields);
     }
 }

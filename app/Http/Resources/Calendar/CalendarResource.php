@@ -2,7 +2,8 @@
 
 namespace App\Http\Resources\Calendar;
 
-use App\Http\Resources\Slot\SlotResource;
+use App\Http\Resources\Property\PropertyResource;
+use App\Http\Resources\Slot\PassResource;
 use App\Http\Resources\User\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,7 +21,9 @@ class CalendarResource extends JsonResource
             'type'       => 'calendars',
             'id'         => (string)$this->getRouteKey(),
             'attributes' => [
-                'name' => $this->name
+                'name' => $this->name,
+                'property_id' => $this->property_id,
+                'property' => new PropertyResource($this->whenLoaded('property')),
             ],
             'links'      => [
 //                'self' => route('companies.show', ['company' => $this->getRouteKey()]),

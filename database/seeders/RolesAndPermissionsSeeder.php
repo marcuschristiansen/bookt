@@ -18,17 +18,17 @@ class RolesAndPermissionsSeeder extends Seeder
         // Reset cached roles and permissions
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // company permissions
+        // team permissions
         Permission::create(['name' => 'view teams']);
         Permission::create(['name' => 'edit teams']);
         Permission::create(['name' => 'delete teams']);
         Permission::create(['name' => 'create teams']);
 
-        // booking permissions
-        Permission::create(['name' => 'view bookings']);
-        Permission::create(['name' => 'edit bookings']);
-        Permission::create(['name' => 'delete bookings']);
-        Permission::create(['name' => 'create bookings']);
+        // property permissions
+        Permission::create(['name' => 'view properties']);
+        Permission::create(['name' => 'edit properties']);
+        Permission::create(['name' => 'delete properties']);
+        Permission::create(['name' => 'create properties']);
 
         // calendar permissions
         Permission::create(['name' => 'view calendars']);
@@ -36,11 +36,23 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::create(['name' => 'delete calendars']);
         Permission::create(['name' => 'create calendars']);
 
+        // booking permissions
+        Permission::create(['name' => 'view bookings']);
+        Permission::create(['name' => 'edit bookings']);
+        Permission::create(['name' => 'delete bookings']);
+        Permission::create(['name' => 'create bookings']);
+
         // slot permissions
         Permission::create(['name' => 'view slots']);
         Permission::create(['name' => 'edit slots']);
         Permission::create(['name' => 'delete slots']);
         Permission::create(['name' => 'create slots']);
+
+        // pass permissions
+        Permission::create(['name' => 'view passes']);
+        Permission::create(['name' => 'edit passes']);
+        Permission::create(['name' => 'delete passes']);
+        Permission::create(['name' => 'create passes']);
 
 
         // roles
@@ -51,27 +63,32 @@ class RolesAndPermissionsSeeder extends Seeder
             ->givePermissionTo([
                 'view teams',
                 'edit teams',
+                'delete teams',
+                'create teams',
+                'view properties',
+                'edit properties',
+                'delete properties',
+                'create properties',
+                'view calendars',
+                'edit calendars',
+                'create calendars',
+                'delete calendars',
+                'edit calendars',
                 'view bookings',
                 'edit bookings',
                 'delete bookings',
                 'create bookings',
-                'view calendars',
-                'edit calendars',
                 'view slots',
                 'edit slots',
                 'delete slots',
-                'create slots'
+                'create slots',
+                'view passes',
+                'edit passes',
+                'delete passes',
+                'create passes',
             ]);
 
         Role::create(['name' => 'user'])
-            ->givePermissionTo([
-                'view teams',
-                'view bookings',
-                'edit bookings',
-                'delete bookings',
-                'create bookings',
-                'view calendars',
-                'view slots'
-            ]);
+            ->givePermissionTo([]);
     }
 }

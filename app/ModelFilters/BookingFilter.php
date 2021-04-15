@@ -30,7 +30,7 @@ class BookingFilter extends ModelFilter
      * @param string $value
      * @return BookingFilter
      */
-    public function propertyId($value)
+    public function property($value)
     {
         return $this->where('property_id', $value);
     }

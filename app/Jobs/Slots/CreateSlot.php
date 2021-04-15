@@ -14,17 +14,24 @@ class CreateSlot implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * @var Request $request
+     * @var array $slot
      */
-    public $request;
+    public array $slot;
+
+    /**
+     * @var int $calendarId
+     */
+    public int $calendarId;
 
     /**
      * Create a new job instance.
      *
-     * @param Request $request
+     * @param array $slot
+     * @param int $calendarId
      */
-    public function __construct(Request $request)
+    public function __construct(array $slot, int $calendarId)
     {
-        $this->request = $request;
+        $this->slot = $slot;
+        $this->calendarId = $calendarId;
     }
 }

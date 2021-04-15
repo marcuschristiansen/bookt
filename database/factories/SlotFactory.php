@@ -29,14 +29,15 @@ class SlotFactory extends Factory
      */
     public function definition()
     {
-        $startTime = array_rand(self::TIME_SLOTS);
-        $endTime = $startTime++;
+        $startTime = collect(self::TIME_SLOTS)->random();
+        $calendar = Calendar::all()->random();
         return [
-            'calendar_id' => Calendar::all()->random(),
-            'day_id' => range(1, 7),
-//            'start_time' => self::TIME_SLOTS[$startTime],
-//            'end_time' => (array_key_exists($endTime, self::TIME_SLOTS)) ? self::TIME_SLOTS[$endTime] : '18:00',
-            'max_bookings' => random_int(1, 15)
+            'calendar_id' => $calendar->getKey(),
+            'start_time' => $startTime,
+            'end_time' => date('H:i', strtotime($startTime) + 60 * 60),
+            'max_bookings' => random_int(1, 15),
+            'day_id' => random_int(1, 7),
+            'cost' => '50.00'
         ];
     }
 }
