@@ -1,168 +1,171 @@
 <template>
     <app-layout>
-        <template #header>
-            <div class="flex justify-between">
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                    Bookings
-                </h2>
+        <div class="flex flex-wrap mt-4">
+            <div class="w-full mb-12 xl:mb-0 px-4">
+                <div
+                    class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded"
+                >
+                    <div class="rounded-t mb-0 px-4 py-3 border-0">
+                        <h3
+                            class="font-semibold text-base text-blueGray-700 my-4"
+                        >
+                            Bookings for
+                            {{ moment(date).format('Do MMMM YYYY') }}
+                        </h3>
+                        <div class="flex flex-wrap items-center">
+                            <div class="mr-4">
+                                <jet-label value="Select date" />
+                                <date-picker
+                                    v-model="selectedDate"
+                                    class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full"
+                                ></date-picker>
+                            </div>
+                            <div class="mr-4 flex-auto">
+                                <jet-label value="Select property" />
+                                <jet-select
+                                    :options="properties"
+                                    :selected-option="selectedProperty"
+                                    @selectChange="propertyChanged"
+                                ></jet-select>
+                            </div>
+
+                            <div
+                                class="relative w-full px-4 max-w-full flex-grow flex-1 text-right"
+                            >
+                                <!--                                <jet-nav-link-->
+                                <!--                                    :href="route('properties.create')"-->
+                                <!--                                    class="bg-indigo-500 text-white active:bg-indigo-600 hover:bg-indigo-400 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 inline hover:text-white"-->
+                                <!--                                    type="button"-->
+                                <!--                                    style="transition: all 0.15s ease"-->
+                                <!--                                >-->
+                                <!--                                    Create New-->
+                                <!--                                </jet-nav-link>-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="block w-full overflow-x-auto">
+                        <!-- Projects table -->
+                        <table
+                            class="items-center w-full bg-transparent border-collapse"
+                        >
+                            <thead>
+                                <tr>
+                                    <th
+                                        class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+                                    >
+                                        Name
+                                    </th>
+                                    <th
+                                        class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+                                    >
+                                        Property
+                                    </th>
+                                    <th
+                                        class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+                                    >
+                                        Calendar
+                                    </th>
+                                    <th
+                                        class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+                                    >
+                                        Slot
+                                    </th>
+                                    <th
+                                        class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+                                    ></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    v-for="(
+                                        bookingSlot, bookingSlotIndex
+                                    ) in bookingSlots.data"
+                                    :key="bookingSlotIndex"
+                                >
+                                    <th
+                                        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
+                                    >
+                                        <jet-nav-link
+                                            class="inline"
+                                            :href="
+                                                route(
+                                                    'bookings.show',
+                                                    bookingSlot.attributes
+                                                        .booking_id
+                                                )
+                                            "
+                                        >
+                                            {{
+                                                bookingSlot.attributes.booking
+                                                    .attributes.user.attributes
+                                                    .name
+                                            }}
+                                        </jet-nav-link>
+                                    </th>
+                                    <td
+                                        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+                                    >
+                                        {{
+                                            bookingSlot.attributes.booking
+                                                .attributes.property.attributes
+                                                .name
+                                        }}
+                                    </td>
+                                    <td
+                                        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+                                    >
+                                        {{
+                                            bookingSlot.attributes.slot
+                                                .attributes.calendar.attributes
+                                                .name
+                                        }}
+                                    </td>
+                                    <td
+                                        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+                                    >
+                                        {{
+                                            bookingSlot.attributes.slot
+                                                .attributes.start_time
+                                        }}
+                                        -
+                                        {{
+                                            bookingSlot.attributes.slot
+                                                .attributes.end_time
+                                        }}
+                                    </td>
+                                    <td
+                                        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+                                    >
+                                        <!--                                        <jet-nav-link-->
+                                        <!--                                            class="inline"-->
+                                        <!--                                            :href="-->
+                                        <!--                                                route(-->
+                                        <!--                                                    'properties.edit',-->
+                                        <!--                                                    property.id-->
+                                        <!--                                                )-->
+                                        <!--                                            "-->
+                                        <!--                                        >-->
+                                        <!--                                            <i-->
+                                        <!--                                                class="fas fa-edit text-gray-800 mr-4"-->
+                                        <!--                                            ></i>-->
+                                        <!--                                        </jet-nav-link>-->
+
+                                        <i
+                                            class="fas fa-trash-alt text-gray-800 mr-4 cursor-pointer"
+                                            @click="
+                                                deleteBookingSlot(
+                                                    bookingSlot.id
+                                                )
+                                            "
+                                        ></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-        </template>
-
-        <div class="my-8">
-            <JetBookingsCalendar
-                :bookings="bookings.data"
-                @bookingDelete="deleteBooking"
-            />
         </div>
-
-        <!--        <div v-if="calendars.length && calendars" class="py-12">-->
-        <!--            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">-->
-        <!--                <date-picker-->
-        <!--                    v-model="selectedDate"-->
-        <!--                    class="inline-block mr-4"-->
-        <!--                ></date-picker>-->
-        <!--                <jet-select-->
-        <!--                    id="slot"-->
-        <!--                    :selected-option="-->
-        <!--                        calendars.find(({ id }) => id === calendar)-->
-        <!--                    "-->
-        <!--                    class="min-w-max"-->
-        <!--                    :options="calendars"-->
-        <!--                    @selectChange="calendarChanged"-->
-        <!--                ></jet-select>-->
-        <!--                <div-->
-        <!--                    class="bg-white overflow-hidden shadow-xl sm:rounded-lg mt-8"-->
-        <!--                >-->
-        <!--                    <table class="min-w-full divide-y divide-gray-200">-->
-        <!--                        <thead class="bg-gray-50">-->
-        <!--                            <tr>-->
-        <!--                                <th-->
-        <!--                                    scope="col"-->
-        <!--                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"-->
-        <!--                                >-->
-        <!--                                    Name-->
-        <!--                                </th>-->
-        <!--                                <th-->
-        <!--                                    scope="col"-->
-        <!--                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"-->
-        <!--                                >-->
-        <!--                                    Date-->
-        <!--                                </th>-->
-        <!--                                <th-->
-        <!--                                    scope="col"-->
-        <!--                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"-->
-        <!--                                >-->
-        <!--                                    Time-->
-        <!--                                </th>-->
-        <!--                                <th-->
-        <!--                                    scope="col"-->
-        <!--                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"-->
-        <!--                                >-->
-        <!--                                    Calendar-->
-        <!--                                </th>-->
-        <!--                                <th-->
-        <!--                                    scope="col"-->
-        <!--                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"-->
-        <!--                                ></th>-->
-        <!--                                &lt;!&ndash;                                <th scope="col" class="relative px-6 py-3">&ndash;&gt;-->
-        <!--                                &lt;!&ndash;                                    <span class="sr-only">Actions</span>&ndash;&gt;-->
-        <!--                                &lt;!&ndash;                                </th>&ndash;&gt;-->
-        <!--                            </tr>-->
-        <!--                        </thead>-->
-        <!--                        <tbody class="bg-white divide-y divide-gray-200">-->
-        <!--                            <tr-->
-        <!--                                v-for="booking in bookings.data"-->
-        <!--                                :key="booking.id"-->
-        <!--                            >-->
-        <!--                                <td class="px-6 py-4 whitespace-nowrap">-->
-        <!--                                    <div class="flex items-center">-->
-        <!--                                        <div>-->
-        <!--                                            <div-->
-        <!--                                                class="text-sm font-medium text-gray-900"-->
-        <!--                                            >-->
-        <!--                                                {{-->
-        <!--                                                    booking.attributes.user-->
-        <!--                                                        .attributes.name-->
-        <!--                                                }}-->
-        <!--                                            </div>-->
-        <!--                                        </div>-->
-        <!--                                    </div>-->
-        <!--                                </td>-->
-        <!--                                <td class="px-6 py-4 whitespace-nowrap">-->
-        <!--                                    <div class="flex items-center">-->
-        <!--                                        <div>-->
-        <!--                                            <div-->
-        <!--                                                class="text-sm font-medium text-gray-900"-->
-        <!--                                            >-->
-        <!--                                                {{-->
-        <!--                                                    formatDate(-->
-        <!--                                                        booking.attributes.date,-->
-        <!--                                                        'LL'-->
-        <!--                                                    )-->
-        <!--                                                }}-->
-        <!--                                            </div>-->
-        <!--                                        </div>-->
-        <!--                                    </div>-->
-        <!--                                </td>-->
-        <!--                                <td class="px-6 py-4 whitespace-nowrap">-->
-        <!--                                    <div class="flex items-center">-->
-        <!--                                        <div>-->
-        <!--                                            <div-->
-        <!--                                                class="text-sm font-medium text-gray-900"-->
-        <!--                                            >-->
-        <!--                                                {{-->
-        <!--                                                    booking.attributes.slot-->
-        <!--                                                        .attributes.start_time-->
-        <!--                                                }}-->
-        <!--                                                - -->
-        <!--                                                {{-->
-        <!--                                                    booking.attributes.slot-->
-        <!--                                                        .attributes.end_time-->
-        <!--                                                }}-->
-        <!--                                            </div>-->
-        <!--                                        </div>-->
-        <!--                                    </div>-->
-        <!--                                </td>-->
-        <!--                                <td class="px-6 py-4 whitespace-nowrap">-->
-        <!--                                    <div class="flex items-center">-->
-        <!--                                        <div>-->
-        <!--                                            <div-->
-        <!--                                                class="text-sm font-medium text-gray-900"-->
-        <!--                                            >-->
-        <!--                                                {{-->
-        <!--                                                    booking.attributes.slot-->
-        <!--                                                        .attributes.calendar-->
-        <!--                                                        .attributes.name-->
-        <!--                                                }}-->
-        <!--                                            </div>-->
-        <!--                                        </div>-->
-        <!--                                    </div>-->
-        <!--                                </td>-->
-        <!--                                <td class="px-6 py-4 whitespace-nowrap">-->
-        <!--                                    <div class="flex items-center">-->
-        <!--                                        <div>-->
-        <!--                                            <div-->
-        <!--                                                class="text-sm font-medium text-gray-900"-->
-        <!--                                            >-->
-        <!--                                                <JetButton-->
-        <!--                                                    @click="-->
-        <!--                                                        deleteBooking(-->
-        <!--                                                            booking.id-->
-        <!--                                                        )-->
-        <!--                                                    "-->
-        <!--                                                    >Delete</JetButton-->
-        <!--                                                >-->
-        <!--                                            </div>-->
-        <!--                                        </div>-->
-        <!--                                    </div>-->
-        <!--                                </td>-->
-        <!--                            </tr>-->
-        <!--                            &lt;!&ndash; More items... &ndash;&gt;-->
-        <!--                        </tbody>-->
-        <!--                    </table>-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--        </div>-->
     </app-layout>
 </template>
 
@@ -173,41 +176,26 @@ import JetButton from '@/Jetstream/Button'
 import JetNavLink from '@/Jetstream/NavLink'
 import moment from 'moment'
 import DatePicker from 'vue3-datepicker'
-import JetBookingsCalendar from '@/Jetstream/BookingsCalendar'
-
 import { ref } from 'vue'
+import JetLabel from '@/Jetstream/Label'
 
 export default {
     components: {
         AppLayout,
         DatePicker,
+        JetLabel,
         JetSelect,
         JetButton,
         JetNavLink,
-        JetBookingsCalendar,
     },
-    props: ['date', 'calendar', 'bookings'],
+    props: ['bookings', 'bookingSlots', 'properties', 'date', 'property'],
     data() {
         return {
-            selectedCalendar: this.calendar,
+            selectedProperty: this.properties.filter(
+                (property) => property.id === this.property
+            )[0],
             selectedDate: ref(new Date(this.date)),
         }
-    },
-    computed: {
-        calendars() {
-            const calendars = this.$page['props']['user']['current_team'][
-                'calendars'
-            ]
-
-            return calendars.map((calendar) => {
-                const container = {}
-
-                container['id'] = calendar.id
-                container['label'] = calendar.name
-
-                return container
-            })
-        },
     },
     watch: {
         selectedDate() {
@@ -215,31 +203,28 @@ export default {
         },
     },
     methods: {
-        formatDate(date, format) {
-            return moment(date).format(format)
-        },
+        moment,
         fetchBookings() {
             const date = moment(this.selectedDate).format('YYYY-MM-DD')
             this.$inertia.visit(
-                `/bookings?date=${date}&calendar=${this.selectedCalendar}`
+                `/bookings?date=${date}&property=${this.selectedProperty.id}`
             )
         },
-        calendarChanged(calendar) {
-            this.selectedCalendar = calendar.id
+        propertyChanged(property) {
+            this.selectedProperty = property
             this.fetchBookings()
         },
-        deleteBooking(id) {
-            // delete the slot from the server
-            this.$inertia.post(`/bookings/${id}`, {
-                preserveScroll: true,
-                _method: 'DELETE',
-            })
+        deleteBookingSlot(id) {
+            console.log(id)
+            if (!confirm('Are you sure want to remove this booking slot?'))
+                return
+            this.$inertia.delete(route('bookings.destroyBookingSlot', id))
         },
     },
 }
 </script>
 
-<style>
+<style scoped>
 .v3dp__datepicker {
     display: inline-block;
 }

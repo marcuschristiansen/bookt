@@ -96,12 +96,23 @@
                 >
                     <li class="inline-flex">
                         <jet-nav-link
-                            class="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
+                            class="text-blueGray-500 hover:text-blueGray-800 text-xs uppercase py-3 font-bold block"
                             :href="route('properties.index')"
                             :active="route().current('properties.*')"
                         >
                             <i class="fas fa-home opacity-75 mr-2 text-sm"></i>
                             Properties
+                        </jet-nav-link>
+                    </li>
+                    <li class="inline-flex">
+                        <jet-nav-link
+                            :href="route('bookings.index')"
+                            :active="route().current('bookings.*')"
+                        >
+                            <i
+                                class="fas fa-calendar-alt opacity-75 mr-2 text-sm"
+                            ></i>
+                            Bookings
                         </jet-nav-link>
                     </li>
                 </ul>
@@ -110,14 +121,12 @@
     </nav>
 </template>
 <script>
-import UserDropdownComponent from './UserDropdown.vue'
 import JetNavLink from '@/Jetstream/NavLink'
 import Navbar from '@/Custom/Navbar'
 
 export default {
     components: {
         Navbar,
-        UserDropdownComponent,
         JetNavLink,
     },
     data() {

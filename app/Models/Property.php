@@ -41,7 +41,7 @@ class Property extends Model
     /**
      * @var string[]
      */
-    protected $withable = ['team'];
+    protected $withable = ['team', 'bookings'];
 
     /**
      * Get the team that this property belongs to
@@ -60,19 +60,19 @@ class Property extends Model
     }
 
     /**
-     * Get the bookings of this property
-     */
-    public function bookings()
-    {
-//        return $this->hasMany(Booking::class);
-    }
-
-    /**
      * Get the users of this property
      */
     public function users()
     {
         return $this->belongsToMany(User::class);
+    }
+
+    /**
+     * Get all the bookings for this property
+     */
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
     }
 
     /**

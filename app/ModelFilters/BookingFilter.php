@@ -45,21 +45,4 @@ class BookingFilter extends ModelFilter
     {
         return $this->where('date', '=', $value);
     }
-
-    /**
-     * Filter the bookings by calendar
-     *
-     * @param int $value
-     * @return BookingFilter|\Illuminate\Database\Eloquent\Builder
-     */
-    public function calendar(int $value): BookingFilter
-    {
-        if(!$value) {
-            return $this;
-        }
-
-        return $this->whereHas('slot', function($query) use ($value) {
-            $query->where('calendar_id', $value);
-        });
-    }
 }

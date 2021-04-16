@@ -24,7 +24,7 @@ class PropertyResource extends JsonResource
             'attributes' => [
                 'team_id' => $this->team_id,
                 'team' => new TeamResource($this->whenLoaded('team')),
-                'calendars' => CalendarResource::collection($this->calendars),
+                'calendars' => CalendarResource::collection($this->whenLoaded('calendars')),
                 'name' => $this->name,
                 'description' => $this->description,
                 'address' => $this->address,

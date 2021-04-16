@@ -24,6 +24,9 @@ class BookingFactory extends Factory
      */
     public function definition()
     {
-        return [];
+        return [
+            'user_id' => User::all()->random()->getKey(),
+            'date' => $this->faker->dateTimeBetween('+0 days', '+1 years')
+        ];
     }
 }

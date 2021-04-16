@@ -59,14 +59,6 @@ class Slot extends Model
     }
 
     /**
-     * Get all the passes that own this slot
-     */
-    public function passes()
-    {
-//        return $this->belongsToMany(Pass::class);
-    }
-
-    /**
      * @param Calendar $calendar
      */
     public function whereCalendar(Calendar $calendar)

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Booking;
 use App\Models\Calendar;
 use App\Models\Pass;
 use App\Models\Property;
@@ -50,59 +51,70 @@ class DatabaseSeeder extends Seeder
             'user_id' => $user->getKey(),
             'name' => explode(' ', $user->name, 2)[0]."'s Team",
         ]), function(Team $team) {
-            // Create 2 properties for this team
-            tap(Property::factory()->create([
+            // Create 3 private properties for this team
+            Property::factory(3)->create([
                 'team_id' => $team,
-                'name' => $team->name . ' Property',
+                'name' => $team->name . ' ' . $this->faker->word . ' Property',
                 'is_private' => true
-            ]), function(Property $property) {
-                // Create 3 calendars for each property
-//                Calendar::factory(3)->create(['property_id' => $property->getKey()]);
+            ])->each(function(Property $property) {
+                Calendar::factory(3)->create(['property_id' => $property->getKey()
+                ])->each(function(Calendar $calendar) {
+                    // Create slots
+                    $this->createSlots($calendar);
+                });
+            });
 
-            });
-            tap(Property::factory()->create([
+            // Create 3 public properties for this team
+            Property::factory(3)->create([
                 'team_id' => $team,
-                'name' => $team->name . ' Property Number 2',
+                'name' => $team->name . ' ' . $this->faker->word . ' Property',
                 'is_private' => false
-            ]), function(Property $property) {
-                // Create 3 calendars for each property
-                Calendar::factory(3)->create(['property_id' => $property->getKey()]);
+            ])->each(function(Property $property) {
+                Calendar::factory(3)->create(['property_id' => $property->getKey()
+                ])->each(function(Calendar $calendar) {
+                    // Create slots
+                    $this->createSlots($calendar);
+                });
             });
-            // Create slots
-//            $this->createSlots($team);
         });
     }
 
     /**
-     * @param Team $team
+     * @param Calendar $calendar
      * @return void
      * @throws \Exception
      */
-    private function createSlots(Team $team): void
+    private function createSlots(Calendar $calendar): void
     {
-        foreach(self::TIME_SLOTS as $key => $timeSlot) {
-            tap(Slot::factory()->create([
-                'team_id' => $team,
-                'start_time' => $timeSlot,
-                'end_time' => (array_key_exists(++$key, self::TIME_SLOTS)) ? self::TIME_SLOTS[$key++] : '18:00',
-                'max_bookings' => random_int(1, 15)
-            ]), function(Slot $slot) use ($team) {
-                // Get the default pass created for this slot
-                $defaultPass = Pass::create(['name' => $slot->id . ' Default Pass', 'team_id' => $slot->team->getKey()]);
-//                $customDate = rand(0,1);
-                // Create a pass for either 3 days in the week or 2 custom dates
-//                $passRange = PassRange::create([
-//                    'days' => (!$customDate) ? collect(Pass::DAYS)->random(3)->toArray() : null,
-//                    'dates' => ($customDate) ? [$this->faker->dateTimeBetween('now', '+2 months')->format('Y-m-d'), $this->faker->dateTimeBetween('now', '+2 months')->format('Y-m-d')] : null,
-//                ]);
-                // Create relationships
-//                $defaultPass->synchronisePassRanges([$passRange->getKey()]);
+        foreach (Slot::DAYS as $dayKey => $day) {
+            foreach(self::TIME_SLOTS as $key => $timeSlot) {
+                tap(Slot::factory()->create([
+                    'calendar_id' => $calendar->getKey(),
+                    'day_id' => $dayKey,
+                    'start_time' => $timeSlot,
+                    'end_time' => (array_key_exists(++$key, self::TIME_SLOTS)) ? self::TIME_SLOTS[$key++] : '18:00',
+                    'max_bookings' => random_int(1, 15),
+                    'cost' => random_int(0, 200),
+                    'deleted_at' => null
+                ]), function(Slot $slot) {});
+            }
+        }
+    }
 
-                $defaultPass->slots()->sync($slot->getKey());
-
-                $calendar = $team->properties->random()->calendars->random();
-                $defaultPass->calendars()->sync($calendar->getKey());
-            });
+    /**
+     * @param User $user
+     * @param Property $property
+     */
+    private function createBookings(User $user, Property $property)
+    {
+        foreach (range(1,rand(2,15)) as $n) {
+            $booking = Booking::factory()->create([
+                'user_id' => $user->getKey(),
+                'property_id' => $property->getKey(),
+                'date' => $this->faker->dateTimeBetween('now', '+2 months')
+            ]);
+            $slot = $property->calendars->random()->slots->random()->getKey();
+            $booking->slots()->sync([$slot]);
         }
     }
 
@@ -148,58 +160,35 @@ class DatabaseSeeder extends Seeder
 //        /**
 //         * USERS
 //         */
-//        $user = User::factory()->create([
-//            'name' => 'Pieter Mentz',
-//            'email' => 'pieter.mentz@gmail.com',
-//            'password' => Hash::make('password')
-//        ]);
-//        // Create personal team
-//        Team::create([
-//            'user_id' => $user->getKey(),
-//            'name' => explode(' ', $user->name, 2)[0]."'s Team",
-//            'personal_team' => true,
-//        ]);
-//        // Assign user role
-//        $user->assignRole(Role::findByName('user'));
-//        // Add user to 2 properties
-//        $properties = Property::all()->random(2);
-//        $user->addToProperties($properties);
-        // Create between 1-15 bookings
-//        foreach (range(1,rand(2,15)) as $n) {
-//            $property = $properties->random();
-//            $pass = $property->team->passes->random();
-//            Booking::factory()->create([
-//                'user_id' => $user,
-//                'property_id' => $property,
-//                'pass_id' => $pass,
-//                'date' => $this->faker->dateTimeBetween('now', '+2 months')
-//            ]);
-//        }
+        $user = User::factory()->create([
+            'name' => 'Pieter Mentz',
+            'email' => 'pieter.mentz@gmail.com',
+            'password' => Hash::make('password')
+        ]);
+        $user->teams()->create([
+            'name' => explode(' ', $user->name, 2)[0]."'s Team",
+            'personal_team' => true,
+        ]);
+        $user->assignRole(Role::findByName('user'));
+        // Add user to properties
+        $properties = Property::all()->random(3);
+        $user->addToProperties($properties);
+        // Create bookings
+        $this->createBookings($user, $properties->random());
 
-//        // Create additional 50 users
-//        User::factory(50)->create()->each(function(User $user) {
-//            // Create personal team
-//            Team::create([
-//                'user_id' => $user->getKey(),
-//                'name' => explode(' ', $user->name, 2)[0]."'s Team",
-//                'personal_team' => true,
-//            ]);
-//            // Assign user role
-//            $user->assignRole(Role::findByName('user'));
-//            // Add user to 2 properties
-//            $properties = Property::all()->random(2);
-//            $user->addToProperties($properties);
-//            // Create between 1-15 bookings
-////            foreach (range(1,15) as $n) {
-////                $property = $properties->random();
-////                $pass = $property->team->passes->random();
-////                Booking::factory()->create([
-////                    'user_id' => $user,
-////                    'property_id' => $property,
-////                    'pass_id' => $pass,
-////                    'date' => $this->faker->dateTimeBetween('now', '+2 months')
-////                ]);
-////            }
-//        });
+
+        // Create additional random users
+        User::factory(50)->create()->each(function(User $user) {
+            $user->teams()->create([
+                'name' => explode(' ', $user->name, 2)[0]."'s Team",
+                'personal_team' => true,
+            ]);
+            $user->assignRole(Role::findByName('user'));
+            // Add user to properties
+            $properties = Property::all()->random(3);
+            $user->addToProperties($properties);
+            // Create bookings
+            $this->createBookings($user, $properties->random());
+        });
     }
 }

@@ -30,7 +30,7 @@ class BookingPolicy
      */
     public function view(User $user, Booking $booking)
     {
-        //
+        return $user->can('view bookings');
     }
 
     /**

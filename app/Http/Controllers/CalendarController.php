@@ -4,18 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Calendar\CalendarCreate;
 use App\Http\Requests\Calendar\CalendarUpdate;
-use App\Http\Resources\Calendar\CalendarCollection;
 use App\Http\Resources\Calendar\CalendarResource;
 use App\Jobs\Calendars\CreateCalendar;
 use App\Jobs\Calendars\DeleteCalendar;
 use App\Jobs\Calendars\UpdateCalendar;
-use App\Jobs\Slots\CreateSlot;
 use App\Jobs\Slots\SyncSlots;
-use App\Jobs\Slots\UpdateSlot;
 use App\Models\Calendar;
 use App\Repositories\CalendarsRepository;
-use App\Repositories\Criteria\BelongsToProperty;
-use App\Repositories\Criteria\ModelFilter;
 use App\Repositories\Criteria\RequestWith;
 use App\Repositories\PropertiesRepository;
 use Illuminate\Http\RedirectResponse;

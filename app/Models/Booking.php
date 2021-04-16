@@ -23,14 +23,13 @@ class Booking extends Model
     protected $fillable = [
         'user_id',
         'property_id',
-        'pass_id',
         'date'
     ];
 
     /**
      * @var string[]
      */
-    protected $withable = ['user', 'property', 'slot'];
+    protected $withable = ['user', 'slots', 'property'];
 
     /**
      * The attributes that should be cast.
@@ -38,16 +37,8 @@ class Booking extends Model
      * @var array
      */
     protected $casts = [
-//        'date' => 'datetime:Y-m-d'
+        'date' => 'datetime:Y-m-d'
     ];
-
-    /**
-     * Get the property that owns the booking.
-     */
-    public function property()
-    {
-        return $this->belongsTo(Property::class);
-    }
 
     /**
      * Get the pass that owns the booking.
@@ -63,5 +54,21 @@ class Booking extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the property that owns the booking.
+     */
+    public function property()
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    /**
+     * Get the slots that belong to this booking
+     */
+    public function slots()
+    {
+        return $this->belongsToMany(Slot::class);
     }
 }

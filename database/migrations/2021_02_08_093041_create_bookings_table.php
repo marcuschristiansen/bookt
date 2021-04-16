@@ -17,7 +17,6 @@ class CreateBookingsTable extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->foreignId('property_id');
-            $table->foreignId('pass_id');
             $table->date('date');
             $table->timestamps();
         });

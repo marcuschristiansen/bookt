@@ -25,7 +25,7 @@ class SlotResource extends JsonResource
                 'end_time' => $this->end_time,
                 'max_bookings' => (int)$this->max_bookings,
                 'calendar_id' => $this->calendar_id,
-                'calendar' => new CalendarResource($this->calendar),
+                'calendar' => new CalendarResource($this->whenLoaded('calendar')),
                 'day_id' => $this->day_id,
                 'cost' => $this->cost
             ],

@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Booking\BookingCreate;
 use App\Http\Resources\Booking\BookingCollection;
 use App\Http\Resources\Booking\BookingResource;
+use App\Http\Resources\BookingSlot\BookingSlotCollection;
+use App\Http\Resources\Property\PropertyResource;
 use App\Http\Resources\Slot\SlotCollection;
-use App\Models\Booking;
-use App\Models\Calendar;
-use App\Models\Slot;
+use App\Repositories\BookingSlotsRepository;
 use App\Repositories\BookingsRepository;
 use App\Repositories\CalendarsRepository;
 use App\Repositories\Criteria\AlreadyBooked;
+use App\Repositories\Criteria\BelongsToBookings;
 use App\Repositories\Criteria\BookingsByRole;
 use App\Repositories\Criteria\ModelFilter;
 use App\Repositories\Criteria\RequestWith;
@@ -25,29 +26,37 @@ use Inertia\Response;
 class BookingController extends Controller
 {
     /**
-     * @var Booking $booking
+     * @var BookingsRepository $booking
      */
-    private $booking;
+    private BookingsRepository $booking;
 
     /**
-     * @var Slot $slot
+     * @var BookingSlotsRepository $bookingSlot
      */
-    private $slot;
+    private BookingSlotsRepository $bookingSlot;
 
     /**
-     * @var Calendar $calendar
+     * @var SlotsRepository $slot
      */
-    private $calendar;
+    private SlotsRepository $slot;
+
+    /**
+     * @var CalendarsRepository $calendar
+     */
+    private CalendarsRepository $calendar;
 
     /**
      * BookingController constructor.
+     *
      * @param BookingsRepository $booking
+     * @param BookingSlotsRepository $bookingSlot
      * @param SlotsRepository $slot
      * @param CalendarsRepository $calendar
      */
-    public function __construct(BookingsRepository $booking, SlotsRepository $slot, CalendarsRepository $calendar)
+    public function __construct(BookingsRepository $booking, BookingSlotsRepository $bookingSlot, SlotsRepository $slot, CalendarsRepository $calendar)
     {
         $this->booking = $booking;
+        $this->bookingSlot = $bookingSlot;
         $this->slot = $slot;
         $this->calendar = $calendar;
     }
@@ -60,23 +69,48 @@ class BookingController extends Controller
      */
     public function index(Request $request): Response
     {
-        $limit = ($request->has('limit')) ? $request->get('limit') : 20;
-
-        if(!$request->user()->currentTeam) {
-            return Inertia::render('Bookings/Index');
+        if(!$request->has('date')) {
+            request()->request->add(['date' => Carbon::now()->format('Y-m-d')]);
         }
 
         $bookings = $this->booking
             ->pushCriteria(new BookingsByRole())
             ->pushCriteria(new RequestWith())
             ->pushCriteria(new ModelFilter())
-            ->orderBy('date')
-            ->paginate($limit);
+            ->all();
+
+        $bookingSlots = $this->bookingSlot
+            ->pushCriteria(new BelongsToBookings($bookings))
+            ->with(['booking', 'slot', 'booking.property', 'booking.user', 'slot.calendar'])
+            ->all();
 
         return Inertia::render('Bookings/Index', [
             'date' => $request->has('date') ? Carbon::create($request->date)->format('Y-m-d') : Carbon::now()->format('Y-m-d'),
-            'calendar' => $request->has('calendar') ? (int)$request->calendar : '',
-            'bookings' => new BookingCollection($bookings)
+            'properties' => auth()->user()->currentTeam->properties->map(function($item, $index) {
+                return [
+                    'id' => $item['id'],
+                    'label' => $item['name']
+                ];
+            }),
+            'property' => $request->has('property') ? (int)$request->property : '',
+            'bookings' => new BookingCollection($bookings),
+            'bookingSlots' => new BookingSlotCollection($bookingSlots)
+        ]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function show($id): Response
+    {
+        $booking = $this->booking->pushCriteria(new RequestWith())->with(['user', 'slots', 'slots.calendar', 'property'])->find($id);
+        $this->authorize('view', $booking);
+
+        return Inertia::render('Bookings/Show', [
+            'booking' => new BookingResource($booking)
         ]);
     }
 
@@ -147,5 +181,17 @@ class BookingController extends Controller
         $this->booking->findOrFail($id)->delete();
 
         return redirect()->back()->with('message', 'Booking Deleted Successfully.');
+    }
+
+    /**
+     * Remove a specific booking slot of a booking
+     *
+     * @param int $id
+     */
+    public function destroyBookingSlot(int $id)
+    {
+        $booking = $this->bookingSlot->find($id)->delete();
+
+        return redirect()->route('bookings.index');
     }
 }

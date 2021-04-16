@@ -2,19 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\Calendar\CalendarResource;
 use App\Http\Resources\Pass\PassCollection;
 use App\Http\Resources\Pass\PassResource;
-use App\Http\Resources\Slot\SlotCollection;
 use App\Models\Pass;
-use App\Models\Slot;
 use App\Repositories\CalendarsRepository;
 use App\Repositories\Criteria\BelongsToCalendar;
-use App\Repositories\Criteria\BelongsToProperty;
 use App\Repositories\Criteria\ModelFilter;
 use App\Repositories\Criteria\RequestWith;
 use App\Repositories\PassRepository;
-use App\Repositories\PropertiesRepository;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;

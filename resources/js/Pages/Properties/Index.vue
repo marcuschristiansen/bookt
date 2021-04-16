@@ -22,7 +22,7 @@
                             >
                                 <jet-nav-link
                                     :href="route('properties.create')"
-                                    class="bg-indigo-500 text-white active:bg-indigo-600 hover:bg-indigo-400 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 inline hover:text-white"
+                                    class="text-white text-xs font-bold uppercase px-3 py-1 rounded outline-none border focus:outline-none mr-1 mb-1 inline hover:text-white"
                                     type="button"
                                     style="transition: all 0.15s ease"
                                 >

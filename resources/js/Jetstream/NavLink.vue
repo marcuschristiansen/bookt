@@ -11,8 +11,8 @@ export default {
     computed: {
         classes() {
             return this.active
-                ? 'text-gray-500 hover:text-gray-800 text-xs uppercase py-3 font-bold block'
-                : 'text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block'
+                ? 'text-gray-800 hover:text-gray-800 text-xs uppercase py-3 font-bold block'
+                : 'text-gray-500 hover:text-gray-800 text-xs uppercase py-3 font-bold block'
         },
     },
 }

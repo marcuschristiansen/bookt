@@ -4,6 +4,7 @@ namespace App\Repositories\Criteria;
 use App\Models\Property;
 use App\Repositories\Contracts\RepositoryInterface as Repository;
 use Illuminate\Support\Facades\Log;
+use Spatie\Permission\Models\Role;
 
 class BookingsByRole extends Criteria
 {
@@ -16,7 +17,9 @@ class BookingsByRole extends Criteria
     {
         $user = auth()->user();
 
-        if($user->ownsTeam($user->currentTeam)) {
+        $roles = Role::all();
+
+        if($user->hasRole('team-admin')) {
             $properties = Property::where('team_id', auth()->user()->currentTeam->getKey())->pluck('id')->toArray();
             return $model->whereIn('property_id', $properties);
         }

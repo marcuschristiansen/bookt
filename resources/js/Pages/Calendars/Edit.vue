@@ -59,7 +59,7 @@
                                                 </li>
                                             </ul>
                                             <div
-                                                class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded"
+                                                class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6"
                                             >
                                                 <div
                                                     class="px-4 py-5 flex-auto"

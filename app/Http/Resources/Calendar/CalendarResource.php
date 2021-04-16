@@ -3,8 +3,6 @@
 namespace App\Http\Resources\Calendar;
 
 use App\Http\Resources\Property\PropertyResource;
-use App\Http\Resources\Slot\PassResource;
-use App\Http\Resources\User\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CalendarResource extends JsonResource
