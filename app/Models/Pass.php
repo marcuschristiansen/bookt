@@ -65,7 +65,7 @@ class Pass extends Model
      *
      * @param User $user
      */
-    public function isInPropertyMembershipOfUser(User $user)
+    public function isInuserPropertyOfUser(User $user)
     {
         return $user->properties->contains('id', $this->property->getKey());
     }

@@ -58,7 +58,7 @@ class JetstreamServiceProvider extends ServiceProvider
             'delete',
         ]);
 
-        Jetstream::role('team-admin', __('Team Admin'), [
+        Jetstream::role('team-admin', __('Team TeamAdmin'), [
             'create',
             'read',
             'update',

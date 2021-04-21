@@ -134,6 +134,7 @@
       <path value="$PROJECT_DIR$/vendor/spatie/laravel-permission" />
       <path value="$PROJECT_DIR$/vendor/laracasts/generators" />
       <path value="$PROJECT_DIR$/vendor/staudenmeir/belongs-to-through" />
+      <path value="$PROJECT_DIR$/vendor/hashids/hashids" />
     </include_path>
   </component>
   <component name="PhpInterpreters">

@@ -42,7 +42,15 @@ Route::middleware(['auth:sanctum', 'verified'])->delete('/properties/{id}', [\Ap
 Route::middleware(['auth:sanctum', 'verified'])->post('/properties', [\App\Http\Controllers\PropertyController::class, 'store'])->name('properties.store');
 
 // Property Memberships
-Route::middleware(['auth:sanctum', 'verified'])->get('/property-memberships', [\App\Http\Controllers\PropertyMembershipController::class, 'index'])->name('property-memberships.index');
+Route::middleware(['auth:sanctum', 'verified'])->get('users/{userId}/properties', [\App\Http\Controllers\UserPropertyController::class, 'index'])->name('user-properties.index');
+Route::middleware(['auth:sanctum', 'verified'])->post('users/{userId}/properties', [\App\Http\Controllers\UserPropertyController::class, 'store'])->name('user-properties.store');
+Route::middleware(['auth:sanctum', 'verified'])->delete('users/{userId}/properties/{id}', [\App\Http\Controllers\UserPropertyController::class, 'destroy'])->name('user-properties.destroy');
+
+// User Bookings
+Route::middleware(['auth:sanctum', 'verified'])->get('users/{userId}/bookings', [\App\Http\Controllers\UserBookingController::class, 'index'])->name('user-bookings.index');
+Route::middleware(['auth:sanctum', 'verified'])->get('users/{userId}/bookings/create', [\App\Http\Controllers\UserBookingController::class, 'create'])->name('user-bookings.create');
+Route::middleware(['auth:sanctum', 'verified'])->post('users/{userId}/bookings', [\App\Http\Controllers\UserBookingController::class, 'store'])->name('user-bookings.store');
+Route::middleware(['auth:sanctum', 'verified'])->delete('users/{userId}/bookings/{id}', [\App\Http\Controllers\UserBookingController::class, 'destroy'])->name('user-bookings.destroy');
 
 // Calendars
 Route::middleware(['auth:sanctum', 'verified'])->get('properties/{propertyId}/calendars', [\App\Http\Controllers\CalendarController::class, 'index'])->name('calendars.index');
@@ -66,9 +74,13 @@ Route::middleware(['auth:sanctum', 'verified'])->get('calendars/{calendarId}/pas
 Route::middleware(['auth:sanctum', 'verified'])->get('calendars/{calendarId}/passes/{id}', [\App\Http\Controllers\PassController::class, 'show'])->name('passes.show');
 
 // Bookings
+
+// Team Admin
 Route::middleware(['auth:sanctum', 'verified'])->get('/bookings', [\App\Http\Controllers\BookingController::class, 'index'])->name('bookings.index');
 Route::middleware(['auth:sanctum', 'verified'])->post('/bookings', [\App\Http\Controllers\BookingController::class, 'store'])->name('bookings.store');
 Route::middleware(['auth:sanctum', 'verified'])->get('/bookings/create', [\App\Http\Controllers\BookingController::class, 'create'])->name('bookings.create');
 Route::middleware(['auth:sanctum', 'verified'])->get('/bookings/{id}/show', [\App\Http\Controllers\BookingController::class, 'show'])->name('bookings.show');
 Route::middleware(['auth:sanctum', 'verified'])->delete('/bookings/{id}', [\App\Http\Controllers\BookingController::class, 'destroy'])->name('bookings.destroy');
 Route::middleware(['auth:sanctum', 'verified'])->delete('/booking-slot/{id}', [\App\Http\Controllers\BookingController::class, 'destroyBookingSlot'])->name('bookings.destroyBookingSlot');
+
+

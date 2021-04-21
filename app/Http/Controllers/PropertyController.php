@@ -67,7 +67,7 @@ class PropertyController extends Controller
      */
     public function show($id): Response
     {
-        $property = $this->property->pushCriteria(new RequestWith())->with(['calendars'])->find($id);
+        $property = $this->property->pushCriteria(new RequestWith())->with(['calendars', 'users'])->find($id);
         $this->authorize('view', $property);
 
         return Inertia::render('Properties/Show', [

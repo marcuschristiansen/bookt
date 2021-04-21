@@ -17,6 +17,7 @@ class CreatePropertiesTable extends Migration
             $table->id();
             $table->foreignId('team_id')->index();
             $table->text('name');
+            $table->string('joining_code')->nullable();
             $table->longText('description')->nullable();
             $table->text('address')->nullable();
             $table->text('contact_number')->nullable();

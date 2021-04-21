@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Property;
-use App\Models\User;
 use App\Repositories\Contracts\RepositoryInterface;
 use App\Repositories\Eloquent\Repository;
 use Illuminate\Database\Eloquent\Builder;
@@ -34,13 +33,14 @@ class PropertiesRepository extends Repository implements RepositoryInterface
     }
 
     /**
+     * @param int $userId
      * @return mixed
      */
-    public function whereHasPropertyMembership()
+    public function whereHasUserProperty(int $userId)
     {
-        return $this->model->whereHas('users', function($query) {
-            $query->where('user_id', auth()->user()->getKey());
-        });
+        return $this->model->whereHas('users', fn (Builder $query) =>
+            $query->where('user_id', $userId)
+        );
     }
 
     /**

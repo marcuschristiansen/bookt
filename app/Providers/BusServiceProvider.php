@@ -8,6 +8,8 @@ use App\Handlers\Calendars\UpdateCalendarHandler;
 use App\Handlers\Properties\CreatePropertyHandler;
 use App\Handlers\Properties\DeletePropertyHandler;
 use App\Handlers\Properties\UpdatePropertyHandler;
+use App\Handlers\UserProperties\CreateUserPropertyHandler;
+use App\Handlers\UserProperties\DeleteUserPropertyHandler;
 use App\Handlers\Slots\CreateSlotHandler;
 use App\Handlers\Slots\DeleteSlotHandler;
 use App\Handlers\Slots\SyncSlotsHandler;
@@ -18,6 +20,8 @@ use App\Jobs\Calendars\UpdateCalendar;
 use App\Jobs\Properties\CreateProperty;
 use App\Jobs\Properties\DeleteProperty;
 use App\Jobs\Properties\UpdateProperty;
+use App\Jobs\UserProperties\CreateUserProperty;
+use App\Jobs\UserProperties\DeleteUserProperty;
 use App\Jobs\Slots\CreateSlot;
 use App\Jobs\Slots\DeleteSlot;
 use App\Jobs\Slots\SyncSlots;
@@ -55,6 +59,8 @@ class BusServiceProvider extends ServiceProvider
             UpdateSlot::class => UpdateSlotHandler::class,
             DeleteSlot::class => DeleteSlotHandler::class,
             SyncSlots::class => SyncSlotsHandler::class,
+            CreateUserProperty::class => CreateUserPropertyHandler::class,
+            DeleteUserProperty::class => DeleteUserPropertyHandler::class
         ]);
     }
 }

@@ -8,12 +8,14 @@ use App\Models\Pass;
 use App\Models\Property;
 use App\Models\Slot;
 use App\Models\Team;
+use App\Models\UserProperty;
 use App\Policies\BookingPolicy;
 use App\Policies\CalendarPolicy;
 use App\Policies\PassPolicy;
 use App\Policies\PropertyPolicy;
 use App\Policies\SlotPolicy;
 use App\Policies\TeamPolicy;
+use App\Policies\UserPropertyPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -28,6 +30,7 @@ class AuthServiceProvider extends ServiceProvider
         Calendar::class => CalendarPolicy::class,
         Pass::class => PassPolicy::class,
         Property::class => PropertyPolicy::class,
+        UserProperty::class => UserPropertyPolicy::class,
         Slot::class => SlotPolicy::class,
         Team::class => TeamPolicy::class
     ];

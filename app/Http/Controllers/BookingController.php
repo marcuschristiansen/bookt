@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Booking\BookingCreate;
 use App\Http\Resources\Booking\BookingCollection;
 use App\Http\Resources\Booking\BookingResource;
 use App\Http\Resources\BookingSlot\BookingSlotCollection;
-use App\Http\Resources\Property\PropertyResource;
 use App\Http\Resources\Slot\SlotCollection;
 use App\Repositories\BookingSlotsRepository;
 use App\Repositories\BookingsRepository;
 use App\Repositories\CalendarsRepository;
 use App\Repositories\Criteria\AlreadyBooked;
 use App\Repositories\Criteria\BelongsToBookings;
-use App\Repositories\Criteria\BookingsByRole;
+use App\Repositories\Criteria\BookingsByTeam;
 use App\Repositories\Criteria\ModelFilter;
 use App\Repositories\Criteria\RequestWith;
 use App\Repositories\SlotsRepository;
@@ -46,7 +46,7 @@ class BookingController extends Controller
     private CalendarsRepository $calendar;
 
     /**
-     * BookingController constructor.
+     * UserBookingController constructor.
      *
      * @param BookingsRepository $booking
      * @param BookingSlotsRepository $bookingSlot
@@ -74,7 +74,7 @@ class BookingController extends Controller
         }
 
         $bookings = $this->booking
-            ->pushCriteria(new BookingsByRole())
+            ->pushCriteria(new BookingsByTeam())
             ->pushCriteria(new RequestWith())
             ->pushCriteria(new ModelFilter())
             ->all();
@@ -92,7 +92,7 @@ class BookingController extends Controller
                     'label' => $item['name']
                 ];
             }),
-            'property' => $request->has('property') ? (int)$request->property : '',
+            'property' => $request->has('property') ? (int)$request->property : auth()->user()->currentTeam->properties->first()->getKey(),
             'bookings' => new BookingCollection($bookings),
             'bookingSlots' => new BookingSlotCollection($bookingSlots)
         ]);
@@ -190,7 +190,7 @@ class BookingController extends Controller
      */
     public function destroyBookingSlot(int $id)
     {
-        $booking = $this->bookingSlot->find($id)->delete();
+        $this->bookingSlot->find($id)->delete();
 
         return redirect()->route('bookings.index');
     }

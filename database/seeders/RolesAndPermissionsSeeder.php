@@ -30,6 +30,12 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::create(['name' => 'delete properties']);
         Permission::create(['name' => 'create properties']);
 
+        // user property permissions
+        Permission::create(['name' => 'view user properties']);
+        Permission::create(['name' => 'edit user properties']);
+        Permission::create(['name' => 'delete user properties']);
+        Permission::create(['name' => 'create user properties']);
+
         // calendar permissions
         Permission::create(['name' => 'view calendars']);
         Permission::create(['name' => 'edit calendars']);
@@ -69,6 +75,10 @@ class RolesAndPermissionsSeeder extends Seeder
                 'edit properties',
                 'delete properties',
                 'create properties',
+                'view user properties',
+                'edit user properties',
+                'delete user properties',
+                'create user properties',
                 'view calendars',
                 'edit calendars',
                 'create calendars',
@@ -89,6 +99,14 @@ class RolesAndPermissionsSeeder extends Seeder
             ]);
 
         Role::create(['name' => 'user'])
-            ->givePermissionTo([]);
+            ->givePermissionTo([
+                'view user properties',
+                'create user properties',
+                'view bookings',
+                'edit bookings',
+                'delete bookings',
+                'create bookings',
+                'view slots'
+            ]);
     }
 }

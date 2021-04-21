@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\Booking;
 
-use App\Http\Resources\Pass\PassResource;
 use App\Http\Resources\Property\PropertyResource;
 use App\Http\Resources\Slot\SlotResource;
 use App\Http\Resources\User\UserResource;
@@ -27,7 +26,8 @@ class BookingResource extends JsonResource
                 'property_id' => (int)$this->property_id,
                 'property' => new PropertyResource($this->whenLoaded('property')),
                 'slots' => SlotResource::collection($this->whenLoaded('slots')),
-                'date' => $this->date
+                'date' => $this->date,
+                'created_at' => $this->created_at
             ],
             'links'      => [
 //                'self' => route('companies.show', ['company' => $this->getRouteKey()]),

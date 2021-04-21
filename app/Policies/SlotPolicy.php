@@ -35,7 +35,7 @@ class SlotPolicy
             (
                 $slot->calendar->isInUsersTeams($user) ||
                 $slot->calendar->propertyIsPublic() ||
-                $slot->calendar->isInPropertyMembershipOfUser($user)
+                $slot->calendar->isInuserPropertyOfUser($user)
             );
     }
 

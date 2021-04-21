@@ -215,7 +215,6 @@ export default {
             this.fetchBookings()
         },
         deleteBookingSlot(id) {
-            console.log(id)
             if (!confirm('Are you sure want to remove this booking slot?'))
                 return
             this.$inertia.delete(route('bookings.destroyBookingSlot', id))

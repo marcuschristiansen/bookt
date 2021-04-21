@@ -6,6 +6,7 @@ use App\Http\Resources\Calendar\CalendarCollection;
 use App\Http\Resources\Calendar\CalendarResource;
 use App\Http\Resources\Slot\SlotResource;
 use App\Http\Resources\Team\TeamResource;
+use App\Http\Resources\User\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PropertyResource extends JsonResource
@@ -25,7 +26,9 @@ class PropertyResource extends JsonResource
                 'team_id' => $this->team_id,
                 'team' => new TeamResource($this->whenLoaded('team')),
                 'calendars' => CalendarResource::collection($this->whenLoaded('calendars')),
+                'users' => UserResource::collection($this->whenLoaded('users')),
                 'name' => $this->name,
+                'joining_code' => $this->joining_code,
                 'description' => $this->description,
                 'address' => $this->address,
                 'contact_number' => $this->contact_number,

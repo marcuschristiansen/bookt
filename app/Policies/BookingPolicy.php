@@ -16,9 +16,9 @@ class BookingPolicy
      * @param  \App\Models\User  $user
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(User $user, int $userId)
     {
-        //
+        return $user->can('view bookings') && $user->getKey() === $userId;
     }
 
     /**
@@ -41,7 +41,7 @@ class BookingPolicy
      */
     public function create(User $user)
     {
-        //
+        return $user->can('create bookings');
     }
 
     /**
@@ -65,7 +65,7 @@ class BookingPolicy
      */
     public function delete(User $user, Booking $booking)
     {
-        return $user === $booking->user() || $user->ownsTeam($booking->team);
+        return $user->getKey() === $booking->user->getKey() || $user->ownsTeam($booking->property->team);
     }
 
     /**

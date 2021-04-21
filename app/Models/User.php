@@ -47,6 +47,11 @@ class User extends Authenticatable
     ];
 
     /**
+     * @var string[]
+     */
+    protected $with = ['roles'];
+
+    /**
      * The attributes that should be cast to native types.
      *
      * @var array

@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Booking;
 use App\Models\Calendar;
-use App\Models\Pass;
 use App\Models\Property;
 use App\Models\Slot;
 use App\Models\Team;
@@ -165,10 +164,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'pieter.mentz@gmail.com',
             'password' => Hash::make('password')
         ]);
-        $user->teams()->create([
-            'name' => explode(' ', $user->name, 2)[0]."'s Team",
-            'personal_team' => true,
-        ]);
+        $this->createTeam($user);
         $user->assignRole(Role::findByName('user'));
         // Add user to properties
         $properties = Property::all()->random(3);
@@ -179,10 +175,7 @@ class DatabaseSeeder extends Seeder
 
         // Create additional random users
         User::factory(50)->create()->each(function(User $user) {
-            $user->teams()->create([
-                'name' => explode(' ', $user->name, 2)[0]."'s Team",
-                'personal_team' => true,
-            ]);
+            $this->createTeam($user);
             $user->assignRole(Role::findByName('user'));
             // Add user to properties
             $properties = Property::all()->random(3);

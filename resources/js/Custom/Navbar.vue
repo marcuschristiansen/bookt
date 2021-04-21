@@ -16,7 +16,7 @@
                             <div class="ml-3 relative">
                                 <!-- Teams Dropdown -->
                                 <jet-dropdown
-                                    v-if="$page.props.jetstream.hasTeamFeatures"
+                                    v-if="$page.props.jetstream.hasTeamFeatures && isTeamAdmin"
                                     align="right"
                                     width="60"
                                 >
@@ -563,6 +563,11 @@ export default {
                 this.$page.props.user.memberships.length
             )
         },
+        isTeamAdmin() {
+            return this.$page.props.user.roles.some(
+                (role) => role.name === 'team-admin'
+            )
+        },
     },
     methods: {
         switchToTeam(team) {
@@ -576,7 +581,6 @@ export default {
                 }
             )
         },
-
         logout() {
             this.$inertia.post(route('logout'))
         },

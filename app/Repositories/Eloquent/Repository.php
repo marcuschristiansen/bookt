@@ -278,6 +278,19 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
     }
 
     /**
+     * @param       $attribute
+     * @param       $value
+     *
+     * @return mixed
+     */
+    public function where($attribute, $value)
+    {
+        $this->applyCriteria();
+
+        return $this->model->where($attribute, '=', $value);
+    }
+
+    /**
      * Find a collection of models by the given query conditions.
      *
      * @param array $where

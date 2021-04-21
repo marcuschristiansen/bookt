@@ -28,7 +28,8 @@ class PropertyUpdate extends FormRequest
             'address' => 'nullable|string',
             'contact_number' => 'nullable',
             'description' => 'nullable',
-            'is_private' => 'boolean|required'
+            'is_private' => 'boolean|required',
+            'joining_code' => 'nullable|string'
         ];
     }
 }

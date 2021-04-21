@@ -33,12 +33,12 @@ class SyncSlotsHandler
                     $this->slot->find($item['id'])->update($item);
                     $updatedSlotIds[] = $item['id'];
                 } else {
-                    $slot = $this->slot->create(array_merge($item, ['calendar_id' => $calendar->getKey()]));
-                    $updatedSlotIds[] = $slot->getKey();
+                    $newSlot = $this->slot->create(array_merge($item, ['calendar_id' => $calendar->getKey(), 'day_id' => $slot['day_id']]));
+                    $updatedSlotIds[] = $newSlot->getKey();
                 }
             }
         }
 
-        return $this->slot->whereNotIn('id', $updatedSlotIds)->delete();
+        return $this->slot->where('calendar_id', $calendar->getKey())->whereNotIn('id', $updatedSlotIds)->delete();
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Feature\PropertyMemberships;
+namespace Tests\Feature\UserProperties;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\Assert;
 use Tests\TestCase;
 
-class GetAllPropertyMembershipsTest extends TestCase
+class GetAllUserPropertiesTest extends TestCase
 {
     use RefreshDatabase;
 

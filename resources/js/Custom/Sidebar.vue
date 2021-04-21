@@ -80,18 +80,46 @@
                 <ul
                     class="md:flex-col md:min-w-full flex flex-col list-none md:mb-4"
                 >
-                    <li></li>
+                    <li>
+                        <jet-nav-link
+                            :href="route('user-bookings.index', $page.props.user.id)"
+                            :active="route().current('user-bookings.*')"
+                        >
+                            <i
+                                class="fas fa-calendar-alt opacity-75 mr-2 text-sm"
+                            ></i>
+                            My Bookings
+                        </jet-nav-link>
+                    </li>
+                    <li>
+                        <jet-nav-link
+                            :href="
+                                route(
+                                    'user-properties.index',
+                                    $page.props.user.id
+                                )
+                            "
+                            :active="route().current('user-properties.*')"
+                        >
+                            <i
+                                class="fas fa-user-lock opacity-75 mr-2 text-sm"
+                            ></i>
+                            My Memberships
+                        </jet-nav-link>
+                    </li>
                 </ul>
                 <!-- Divider -->
-                <hr class="my-4 md:min-w-full" />
+                <hr v-if="isTeamAdmin" class="my-4 md:min-w-full" />
                 <!-- Heading -->
                 <h6
+                    v-if="isTeamAdmin"
                     class="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
                 >
                     Organiser Hub
                 </h6>
                 <!-- Navigation -->
                 <ul
+                    v-if="isTeamAdmin"
                     class="md:flex-col md:min-w-full flex flex-col list-none md:mb-4"
                 >
                     <li class="inline-flex">
@@ -133,6 +161,13 @@ export default {
         return {
             collapseShow: 'hidden',
         }
+    },
+    computed: {
+        isTeamAdmin() {
+            return this.$page.props.user.roles.some(
+                (role) => role.name === 'team-admin'
+            )
+        },
     },
     methods: {
         toggleCollapseShow: function (classes) {

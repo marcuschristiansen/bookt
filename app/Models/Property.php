@@ -23,6 +23,7 @@ class Property extends Model
     protected $fillable = [
         'team_id',
         'name',
+        'joining_code',
         'description',
         'address',
         'contact_number',

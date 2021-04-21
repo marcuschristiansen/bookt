@@ -35,7 +35,7 @@ class CalendarPolicy
             (
                 $calendar->isInUsersTeams($user) ||
                 $calendar->propertyIsPublic() ||
-                $calendar->isInPropertyMembershipOfUser($user)
+                $calendar->isInuserPropertyOfUser($user)
             );
     }
 

@@ -7,6 +7,16 @@ use App\Repositories\Contracts\RepositoryInterface as Repository;
 class BelongsToUser extends Criteria
 {
     /**
+     * @var int $userId
+     */
+    public int $userId;
+
+    public function __construct(int $userId)
+    {
+        $this->userId = $userId;
+    }
+
+    /**
      * @param $model
      * @param Repository $repository
      * @return mixed
