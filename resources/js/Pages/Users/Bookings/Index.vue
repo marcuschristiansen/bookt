@@ -13,8 +13,7 @@
                                 <h3
                                     class="font-semibold text-base text-blueGray-700"
                                 >
-                                    Bookings for:
-                                    {{ $page.props.user.name }}
+                                    Your bookings
                                 </h3>
                             </div>
                             <div
@@ -31,7 +30,7 @@
                                     type="button"
                                     style="transition: all 0.15s ease"
                                 >
-                                    Create New
+                                    Book
                                 </jet-nav-link>
                             </div>
                         </div>

@@ -16,7 +16,10 @@
                             <div class="ml-3 relative">
                                 <!-- Teams Dropdown -->
                                 <jet-dropdown
-                                    v-if="$page.props.jetstream.hasTeamFeatures && isTeamAdmin"
+                                    v-if="
+                                        $page.props.jetstream.hasTeamFeatures &&
+                                        isTeamAdmin
+                                    "
                                     align="right"
                                     width="60"
                                 >
@@ -125,7 +128,7 @@
                                                             >
                                                                 <svg
                                                                     v-if="
-                                                                        team.id ==
+                                                                        team.id ===
                                                                         $page
                                                                             .props
                                                                             .user
@@ -183,7 +186,7 @@
                                                             >
                                                                 <svg
                                                                     v-if="
-                                                                        team.id ==
+                                                                        team.id ===
                                                                         $page
                                                                             .props
                                                                             .user

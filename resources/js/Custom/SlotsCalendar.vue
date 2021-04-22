@@ -1,7 +1,7 @@
 <template>
     <div class="bg-white py-12 sm:rounded-lg mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div class="mx-auto px-6 lg:px-8">
-            <div class="flex flex-wrap">
+            <div class="flex">
                 <h1 class="text-2xl sm:mr-6">
                     {{ months[dates[0].getMonth()] }}
                     {{ dates[0].getFullYear() }}
