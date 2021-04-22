@@ -150,8 +150,8 @@ export default {
             )
         },
         propertyChanged(property) {
-            this.selectedProperty = property
-            this.calendarChanged(property.calendars[0])
+            this.selectedProperty = [property]
+            this.calendarChanged(property[0].calendars[0])
         },
         calendarChanged(calendar) {
             this.selectedProperty[0].calendars[0] = calendar
