@@ -29,7 +29,7 @@
                                         <div class="w-full">
                                             <jet-label value="Slots" />
                                             <ul
-                                                class="flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row"
+                                                class="flex mb-0 list-none flex-col md:flex-row pt-3 pb-4 flex-row"
                                             >
                                                 <li
                                                     v-for="(
@@ -59,7 +59,7 @@
                                                 </li>
                                             </ul>
                                             <div
-                                                class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6"
+                                                class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 overflow-x-auto"
                                             >
                                                 <div
                                                     class="px-4 py-5 flex-auto"
