@@ -6,9 +6,28 @@
                     class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded"
                 >
                     <div class="rounded-t mb-0 px-4 py-3 border-0">
-                        <h1>New booking</h1>
+                        <h3 class="font-semibold text-base text-blueGray-700">
+                            New booking
+                        </h3>
+                        <!-- Booking Errors -->
                         <div class="my-4">
-                            <form @submit.prevent="save">
+                            <div
+                                v-if="form.errors.slot_id"
+                                class="text-white px-6 py-4 border-0 rounded relative mb-4 bg-red-500"
+                            >
+                                <span
+                                    class="text-xl inline-block mr-5 align-middle"
+                                >
+                                    <i class="fas fa-bell"></i>
+                                </span>
+                                <span class="inline-block align-middle mr-8">
+                                    {{ form.errors.slot_id }}
+                                </span>
+                            </div>
+                            <form
+                                v-if="properties.length !== 0"
+                                @submit.prevent="save"
+                            >
                                 <div class="relative w-full mb-3">
                                     <jet-label
                                         for="property"
@@ -17,14 +36,14 @@
                                     <!--                <jet-input id="name" type="text" class="mt-1 block w-full" v-model="form.name" autocomplete="name" />-->
                                     <jet-select
                                         id="property"
-                                        :selected-option="selectedProperty"
+                                        :selected-option="selectedProperty[0]"
                                         class="mt-1 block w-full"
                                         :options="properties"
                                         @selectChange="propertyChanged"
                                     ></jet-select>
                                 </div>
                                 <div
-                                    v-if="selectedProperty"
+                                    v-if="selectedProperty[0]"
                                     class="relative w-full mb-3"
                                 >
                                     <jet-label
@@ -34,7 +53,9 @@
                                     <!--                <jet-input id="name" type="text" class="mt-1 block w-full" v-model="form.name" autocomplete="name" />-->
                                     <jet-select
                                         id="calendar"
-                                        :selected-option="selectedCalendar"
+                                        :selected-option="
+                                            selectedProperty[0].calendars[0]
+                                        "
                                         class="mt-1 block w-full"
                                         :options="calendars"
                                         @selectChange="calendarChanged"
@@ -42,11 +63,17 @@
                                 </div>
                                 <div class="relative w-full mb-3">
                                     <slots-calendar
-                                        :slots="selectedCalendar.slots"
+                                        :slots="
+                                            selectedProperty[0].calendars[0]
+                                                .slots
+                                        "
                                         @slotSelected="saveBooking"
                                     ></slots-calendar>
                                 </div>
                             </form>
+                            <h1 v-if="properties.length === 0">
+                                You do not have any active memberships.
+                            </h1>
                         </div>
                     </div>
                 </div>
@@ -95,15 +122,12 @@ export default {
             }),
             selectedProperty: this.properties.filter(
                 (property) => property.id === this.property.id
-            )[0],
-            selectedCalendar: this.properties.filter(
-                (property) => property.id === this.property.id
-            )[0].calendars[0],
+            ),
         }
     },
     computed: {
         calendars() {
-            return this.selectedProperty.calendars
+            return this.selectedProperty[0].calendars
         },
     },
     methods: {
@@ -111,7 +135,7 @@ export default {
         saveBooking({ slot, date }) {
             if (
                 !confirm(
-                    `Please confirm your booking for ${this.selectedCalendar.label} (${slot.start_time} - ${slot.end_time} at ${this.selectedProperty.label})`
+                    `Please confirm your booking for ${this.selectedProperty[0].calendars[0].label} (${slot.start_time} - ${slot.end_time} at ${this.selectedProperty.label})`
                 )
             )
                 return
@@ -130,7 +154,7 @@ export default {
             this.calendarChanged(property.calendars[0])
         },
         calendarChanged(calendar) {
-            this.selectedCalendar = calendar
+            this.selectedProperty[0].calendars[0] = calendar
         },
     },
 }

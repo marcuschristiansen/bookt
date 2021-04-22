@@ -122,9 +122,9 @@ class UserBookingController extends Controller
      *
      * @param BookingCreate $request
      * @param int $userId
-     * @return RedirectResponse
+     * @return RedirectResponse|int
      */
-    public function store(BookingCreate $request, int $userId): RedirectResponse
+    public function store(BookingCreate $request, int $userId)
     {
         $slot = $this->slot->findOrFail($request->slot_id);
         $formRequest = array_merge($request->only('date'), ['user_id' => $userId, 'property_id' => $slot->calendar->property->getKey()]);
