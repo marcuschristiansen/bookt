@@ -135,7 +135,7 @@ export default {
         saveBooking({ slot, date }) {
             if (
                 !confirm(
-                    `Please confirm your booking for ${this.selectedProperty[0].calendars[0].label} (${slot.start_time} - ${slot.end_time} at ${this.selectedProperty.label})`
+                    `Please confirm your booking for ${this.selectedProperty[0].calendars[0].label} (${slot.start_time} - ${slot.end_time} at ${this.selectedProperty[0].label})`
                 )
             )
                 return
