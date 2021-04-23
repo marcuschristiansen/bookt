@@ -92,6 +92,17 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
     }
 
     /**
+     * @param $relation
+     * @return mixed
+     */
+    public function has($relation)
+    {
+        $this->model = $this->model->has($relation);
+
+        return $this;
+    }
+
+    /**
      * @param  string $value
      * @param  string $key
      *

@@ -14,10 +14,17 @@
                         Today
                     </button>
                     <button
+                        :disabled="startDay === 0"
                         class="inline-flex items-center px-4 mx-2 py-2 border border-transparent rounded-md font-semibold text-xs text-gray-800 uppercase tracking-widest focus:outline-none"
                         @click="startDay -= visibleDays"
                     >
-                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                        <i
+                            class="fa fa-chevron-left"
+                            :class="{
+                                'text-gray-200 cursor-default': startDay === 0,
+                            }"
+                            aria-hidden="true"
+                        ></i>
                     </button>
                     <button
                         class="inline-flex items-center px-4 mx-2 py-2 border border-transparent rounded-md font-semibold text-xs text-gray-800 uppercase tracking-widest focus:outline-none"

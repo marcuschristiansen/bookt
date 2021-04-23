@@ -18,7 +18,7 @@ class Slot extends Model
     use SoftDeletes;
 
     const DAYS = [
-        'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
+        'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
     ];
 
     /**

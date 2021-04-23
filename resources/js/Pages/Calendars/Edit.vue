@@ -336,7 +336,7 @@ export default {
                 slots: [
                     {
                         day_id: 0,
-                        day: 'Monday',
+                        day: 'Sunday',
                         items:
                             0 in this.currentSlots
                                 ? this.currentSlots[0]['items']
@@ -344,7 +344,7 @@ export default {
                     },
                     {
                         day_id: 1,
-                        day: 'Tuesday',
+                        day: 'Monday',
                         items:
                             1 in this.currentSlots
                                 ? this.currentSlots[1]['items']
@@ -352,7 +352,7 @@ export default {
                     },
                     {
                         day_id: 2,
-                        day: 'Wednesday',
+                        day: 'Tuesday',
                         items:
                             2 in this.currentSlots
                                 ? this.currentSlots[2]['items']
@@ -360,7 +360,7 @@ export default {
                     },
                     {
                         day_id: 3,
-                        day: 'Thursday',
+                        day: 'Wednesday',
                         items:
                             3 in this.currentSlots
                                 ? this.currentSlots[3]['items']
@@ -368,7 +368,7 @@ export default {
                     },
                     {
                         day_id: 4,
-                        day: 'Friday',
+                        day: 'Thursday',
                         items:
                             4 in this.currentSlots
                                 ? this.currentSlots[4]['items']
@@ -376,7 +376,7 @@ export default {
                     },
                     {
                         day_id: 5,
-                        day: 'Saturday',
+                        day: 'Friday',
                         items:
                             5 in this.currentSlots
                                 ? this.currentSlots[5]['items']
@@ -384,7 +384,7 @@ export default {
                     },
                     {
                         day_id: 6,
-                        day: 'Sunday',
+                        day: 'Saturday',
                         items:
                             6 in this.currentSlots
                                 ? this.currentSlots[6]['items']

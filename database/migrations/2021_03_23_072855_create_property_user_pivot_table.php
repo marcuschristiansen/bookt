@@ -16,7 +16,7 @@ class CreatePropertyUserPivotTable extends Migration
         Schema::create('property_user', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('property_id')->index();
-            $table->foreign('property_id')->references('id')->on('properties')->onDelete('cascade');
+            $table->foreign('property_id')->references('id')->on('properties')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedBigInteger('user_id')->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

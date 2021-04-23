@@ -15,7 +15,7 @@ class CreateSlotsTable extends Migration
     {
         Schema::create('slots', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('calendar_id')->index();
+            $table->foreignId('calendar_id')->constrained('calendars')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('day_id');
             $table->time('start_time');
             $table->time('end_time');

@@ -15,7 +15,7 @@ class CreateCalendarsTable extends Migration
     {
         Schema::create('calendars', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('property_id');
+            $table->foreignId('property_id')->constrained('properties')->onDelete('cascade')->onUpdate('cascade');
             $table->text('name');
             $table->timestamps();
             $table->softDeletes();

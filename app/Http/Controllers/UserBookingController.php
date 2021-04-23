@@ -78,11 +78,13 @@ class UserBookingController extends Controller
             ->pushCriteria(new BelongsToUser($userId))
             ->pushCriteria(new RequestWith())
             ->with(['property', 'slots'])
+            ->has('property')
             ->all();
 
         $bookingSlots = $this->bookingSlot
             ->pushCriteria(new BelongsToBookings($bookings))
             ->with(['booking', 'slot', 'booking.property', 'booking.user', 'slot.calendar'])
+            ->has('slot.calendar')
             ->all();
 
         return Inertia::render('Users/Bookings/Index', [

@@ -336,37 +336,37 @@ export default {
                 slots: [
                     {
                         day_id: 0,
-                        day: 'Monday',
+                        day: 'Sunday',
                         items: [],
                     },
                     {
                         day_id: 1,
-                        day: 'Tuesday',
+                        day: 'Monday',
                         items: [],
                     },
                     {
                         day_id: 2,
-                        day: 'Wednesday',
+                        day: 'Tuesday',
                         items: [],
                     },
                     {
                         day_id: 3,
-                        day: 'Thursday',
+                        day: 'Wednesday',
                         items: [],
                     },
                     {
                         day_id: 4,
-                        day: 'Friday',
+                        day: 'Thursday',
                         items: [],
                     },
                     {
                         day_id: 5,
-                        day: 'Saturday',
+                        day: 'Friday',
                         items: [],
                     },
                     {
                         day_id: 6,
-                        day: 'Sunday',
+                        day: 'Saturday',
                         items: [],
                     },
                 ],

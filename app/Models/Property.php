@@ -40,7 +40,7 @@ class Property extends Model
     ];
 
     /**
-     * @var string[]
+     * @var string[] $withable
      */
     protected $withable = ['team', 'bookings'];
 
